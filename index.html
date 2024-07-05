@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>कालभैरवाष्टकं</title>
+    <style>
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            background-color: #282828;
+            color: #fff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .content {
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            max-width: 800px;
+            text-align: center;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        button {
+            background-color: #ff4500;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0 5px;
+        }
+        button:hover {
+            background-color: #d13600;
+        }
+        audio {
+            margin-top: 20px;
+        }
+        .credit {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        .credit a {
+            color: #ff4500;
+            text-decoration: none;
+        }
+        .credit a:hover {
+            text-decoration: underline;
+        }
+        pre {
+            white-space: pre-wrap; 
+            word-wrap: break-word;
+            text-align: center; 
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+        <pre>
+            देवराजसेव्यमानपावनांघ्रिपङ्कजं व्यालयज्ञसूत्रमिन्दुशेखरं कृपाकरम् ।
+            नारदादियोगिवृन्दवन्दितं दिगंबरं काशिकापुराधिनाथकालभैरवं भजे ॥ १॥
+
+            भानुकोटिभास्वरं भवाब्धितारकं परं नीलकण्ठमीप्सितार्थदायकं त्रिलोचनम् ।
+            कालकालमंबुजाक्षमक्षशूलमक्षरं काशिकापुराधिनाथकालभैरवं भजे ॥ २॥
+
+            शूलटंकपाशदण्डपाणिमादिकारणं श्यामकायमादिदेवमक्षरं निरामयम् ।
+            भीमविक्रमं प्रभुं विचित्रताण्डवप्रियं काशिकापुराधिनाथकालभैरवं भजे ॥ ३॥
+
+            भुक्तिमुक्तिदायकं प्रशस्तचारुविग्रहं भक्तवत्सलं स्थितं समस्तलोकविग्रहम् ।
+            विनिक्वणन्मनोज्ञहेमकिङ्किणीलसत्कटिं काशिकापुराधिनाथकालभैरवं भजे॥ ४॥
+
+            धर्मसेतुपालकं त्वधर्ममार्गनाशनं कर्मपाशमोचकं सुशर्मधायकं विभुम् ।
+            स्वर्णवर्णशेषपाशशोभितांगमण्डलं काशिकापुराधिनाथकालभैरवं भजे ॥ ५॥
+
+            रत्नपादुकाप्रभाभिरामपादयुग्मकं नित्यमद्वितीयमिष्टदैवतं निरंजनम् ।
+            मृत्युदर्पनाशनं करालदंष्ट्रमोक्षणं काशिकापुराधिनाथकालभैरवं भजे ॥ ६॥
+
+            अट्टहासभिन्नपद्मजाण्डकोशसंततिं दृष्टिपात्तनष्टपापजालमुग्रशासनम् ।
+            अष्टसिद्धिदायकं कपालमालिकाधरं काशिकापुराधिनाथकालभैरवं भजे ॥ ७॥
+
+            भूतसंघनायकं विशालकीर्तिदायकं काशिवासलोकपुण्यपापशोधकं विभुम् ।
+            नीतिमार्गकोविदं पुरातनं जगत्पतिं काशिकापुराधिनाथकालभैरवं भजे ॥ ८॥
+
+            ॥ फल श्रुति॥
+
+            कालभैरवाष्टकं पठंति ये मनोहरं ज्ञानमुक्तिसाधनं विचित्रपुण्यवर्धनम् ।
+            शोकमोहदैन्यलोभकोपतापनाशनं प्रयान्ति कालभैरवांघ्रिसन्निधिं नरा ध्रुवम् ॥
+        </pre>
+        <div class="button-container">
+            <button onclick="document.getElementById('audio').play()">Play</button>
+            <button onclick="document.getElementById('audio').pause()">Pause</button>
+            <button onclick="document.getElementById('audio').currentTime = 0">Stop</button>
+        </div>
+        <audio id="audio" controls>
+            <source src="Kaal Bhairav Ashtakam.mp3" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+        <div class="credit">
+            Audio credit: <a href="https://www.youtube.com/watch?v=xJyiIgAKNJA" target="_blank">YouTube</a>
+        </div>
+    </div>
+</body>
+</html>
