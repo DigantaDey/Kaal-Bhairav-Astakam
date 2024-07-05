@@ -14,9 +14,10 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
             flex-direction: column;
             text-align: center;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
         .content {
             background-color: #1e1e1e;
@@ -26,6 +27,7 @@
             max-width: 800px;
             width: 100%;
             box-sizing: border-box;
+            margin: auto;
         }
         .button-container {
             text-align: center;
@@ -44,20 +46,23 @@
         button:hover {
             background-color: #d13600;
         }
-        audio {
-            margin-top: 20px;
-            width: 100%;
-        }
-        .credit {
+        .footer {
             margin-top: 20px;
             font-size: 14px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
         }
-        .credit a {
+        .footer a {
             color: #ff4500;
             text-decoration: none;
         }
-        .credit a:hover {
+        .footer a:hover {
             text-decoration: underline;
+        }
+        .footer img {
+            width: 24px;
+            height: 24px;
         }
         pre {
             white-space: pre-wrap; 
@@ -65,52 +70,172 @@
             text-align: center; 
             margin: 0;
         }
+        .audio-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #1e1e1e;
+            border: 1px solid #ff4500;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            z-index: 1000;
+        }
+        .tooltip {
+            display: inline-block;
+            position: relative;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: left;
+            border-radius: 5px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position above the tooltip */
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        @media (max-width: 600px) {
+            .tooltip .tooltiptext {
+                left: 0;
+                margin-left: 0;
+                width: 90%;
+            }
+        }
+        /* Specific styles for the first two verses */
+        .first-verse-tooltip .tooltiptext,
+        .second-verse-tooltip .tooltiptext {
+            left: auto;
+            right: 50%;
+            margin-right: -100px;
+        }
     </style>
 </head>
 <body>
     <div class="content">
         <pre>
-देवराजसेव्यमानपावनांघ्रिपङ्कजं व्यालयज्ञसूत्रमिन्दुशेखरं कृपाकरम् ।
-नारदादियोगिवृन्दवन्दितं दिगंबरं काशिकापुराधिनाथकालभैरवं भजे ॥ १॥
-
-भानुकोटिभास्वरं भवाब्धितारकं परं नीलकण्ठमीप्सितार्थदायकं त्रिलोचनम् ।
-कालकालमंबुजाक्षमक्षशूलमक्षरं काशिकापुराधिनाथकालभैरवं भजे ॥ २॥
-
-शूलटंकपाशदण्डपाणिमादिकारणं श्यामकायमादिदेवमक्षरं निरामयम् ।
-भीमविक्रमं प्रभुं विचित्रताण्डवप्रियं काशिकापुराधिनाथकालभैरवं भजे ॥ ३॥
-
-भुक्तिमुक्तिदायकं प्रशस्तचारुविग्रहं भक्तवत्सलं स्थितं समस्तलोकविग्रहम् ।
-विनिक्वणन्मनोज्ञहेमकिङ्किणीलसत्कटिं काशिकापुराधिनाथकालभैरवं भजे॥ ४॥
-
-धर्मसेतुपालकं त्वधर्ममार्गनाशनं कर्मपाशमोचकं सुशर्मधायकं विभुम् ।
-स्वर्णवर्णशेषपाशशोभितांगमण्डलं काशिकापुराधिनाथकालभैरवं भजे ॥ ५॥
-
-रत्नपादुकाप्रभाभिरामपादयुग्मकं नित्यमद्वितीयमिष्टदैवतं निरंजनम् ।
-मृत्युदर्पनाशनं करालदंष्ट्रमोक्षणं काशिकापुराधिनाथकालभैरवं भजे ॥ ६॥
-
-अट्टहासभिन्नपद्मजाण्डकोशसंततिं दृष्टिपात्तनष्टपापजालमुग्रशासनम् ।
-अष्टसिद्धिदायकं कपालमालिकाधरं काशिकापुराधिनाथकालभैरवं भजे ॥ ७॥
-
-भूतसंघनायकं विशालकीर्तिदायकं काशिवासलोकपुण्यपापशोधकं विभुम् ।
-नीतिमार्गकोविदं पुरातनं जगत्पतिं काशिकापुराधिनाथकालभैरवं भजे ॥ ८॥
-
-॥ फल श्रुति॥
-
-कालभैरवाष्टकं पठंति ये मनोहरं ज्ञानमुक्तिसाधनं विचित्रपुण्यवर्धनम् ।
-शोकमोहदैन्यलोभकोपतापनाशनं प्रयान्ति कालभैरवांघ्रिसन्निधिं नरा ध्रुवम् ॥
+            <span class="tooltip first-verse-tooltip">देवराजसेव्यमानपावनांघ्रिपङ्कजं व्यालयज्ञसूत्रमिन्दुशेखरं कृपाकरम् ।
+            नारदादियोगिवृन्दवन्दितं दिगंबरं काशिकापुराधिनाथकालभैरवं भजे ॥ १॥
+                <span class="tooltiptext">I salute Kalabhairava, the lord of the city of Kasi,
+                Whose lotus like feet is being served by Devendra,
+                Who is merciful and wears the moon on his forehead ,
+                Who wears a snake as his sacred thread,
+                Who wears the different directions as his cloth,
+                And who is worshipped by sages like Narada.</span>
+            </span>
+            
+            <span class="tooltip second-verse-tooltip">भानुकोटिभास्वरं भवाब्धितारकं परं नीलकण्ठमीप्सितार्थदायकं त्रिलोचनम् ।
+            कालकालमंबुजाक्षमक्षशूलमक्षरं काशिकापुराधिनाथकालभैरवं भजे ॥ २॥
+                <span class="tooltiptext">I salute Kalabhairava, the lord of the city of Kasi,
+                Who shines like billions of suns,
+                Who helps us cross this miserable ocean of life,
+                Who is supreme and has a blue neck,
+                Who has three eyes and grants us our desires,
+                Who is the death to the God of death*,
+                Who has lotus flower like eyes,
+                Who has the undefeatable trident,
+                And who does not have decay.</span>
+            </span>
+            
+            <span class="tooltip">शूलटंकपाशदण्डपाणिमादिकारणं श्यामकायमादिदेवमक्षरं निरामयम् ।
+            भीमविक्रमं प्रभुं विचित्रताण्डवप्रियं काशिकापुराधिनाथकालभैरवं भजे ॥ ३॥
+                <span class="tooltiptext">I salute Kalabhairava, the lord of the city of Kasi,
+                Who has a spear, a chord and a stick as weapons,
+                Who is black in colour and the primeval cause,
+                Who is deathless and the first God,
+                Who is free from decay and ill health,
+                Who is the Lord who is a great hero,
+                And who likes the special vigorous thandava*.</span>
+            </span>
+            
+            <span class="tooltip">भुक्तिमुक्तिदायकं प्रशस्तचारुविग्रहं भक्तवत्सलं स्थितं समस्तलोकविग्रहम् ।
+            विनिक्वणन्मनोज्ञहेमकिङ्किणीलसत्कटिं काशिकापुराधिनाथकालभैरवं भजे॥ ४॥
+                <span class="tooltiptext">I salute Kalabhairava, the lord of the city of Kasi,
+                Who fulfills desires and also grants salvation,
+                Who is well known for his pretty mien,
+                Who is a form of Shiva ,who loves his devotees,
+                Who is the God of the entire world,
+                Who assumes various forms,
+                And who has a golden waist thread,
+                On which jingling bells are tied.</span>
+            </span>
+            
+            <span class="tooltip">धर्मसेतुपालकं त्वधर्ममार्गनाशनं कर्मपाशमोचकं सुशर्मधायकं विभुम् ।
+            स्वर्णवर्णशेषपाशशोभितांगमण्डलं काशिकापुराधिनाथकालभैरवं भजे ॥ ५॥
+                <span class="tooltiptext">I salute Kalabhairava, the lord of the city of Kasi,
+                Who maintains the bridge of dharma in life,
+                Who destroys paths which are not right,
+                Who saves us from the ties of Karma,
+                Who is the lord who makes us ashamed ,
+                When trying to do wrong things,
+                Who has a shining body because of golden rope ,
+                With bells tied in various places.</span>
+            </span>
+            
+            <span class="tooltip">रत्नपादुकाप्रभाभिरामपादयुग्मकं नित्यमद्वितीयमिष्टदैवतं निरंजनम् ।
+            मृत्युदर्पनाशनं करालदंष्ट्रमोक्षणं काशिकापुराधिनाथकालभैरवं भजे ॥ ६॥
+                <span class="tooltiptext">I salute Kalabhairava, the lord of the city of Kasi,
+                Who has feet adorned by the shine of gem studded sandals,
+                Who is eternal and does not have any one second to him,
+                Who is our favorite God who bestows everything,
+                Who takes away the fear of death from humans,
+                And who grants them salvation by his terrible teeth.</span>
+            </span>
+            
+            <span class="tooltip">अट्टहासभिन्नपद्मजाण्डकोशसंततिं दृष्टिपात्तनष्टपापजालमुग्रशासनम् ।
+            अष्टसिद्धिदायकं कपालमालिकाधरं काशिकापुराधिनाथकालभैरवं भजे ॥ ७॥
+                <span class="tooltiptext">I salute Kalabhairava, the lord of the city of Kasi,
+                Whose loud roar is enough to destroy all those created by Brahma,
+                Whose sight is sufficient to destroy all sins,
+                Who is crafty and strict ruler,
+                Who can grant the eight occult powers,
+                And who wears the garland of skulls.</span>
+            </span>
+            
+            <span class="tooltip">भूतसंघनायकं विशालकीर्तिदायकं काशिवासलोकपुण्यपापशोधकं विभुम् ।
+            नीतिमार्गकोविदं पुरातनं जगत्पतिं काशिकापुराधिनाथकालभैरवं भजे ॥ ८॥
+                <span class="tooltiptext">I salute Kalabhairava, the lord of the city of Kashi,
+                Who is the chief of the society of Bhoothas,
+                Who grants broad based fame,
+                Who is the lord who judges good and bad deeds,
+                Of those who live in Varanasi,
+                Who is an expert in the way of righteousness,
+                And who is eternally old and lord of the universe.</span>
+            </span>
+            
+            <span class="tooltip">कालभैरवाष्टकं पठंति ये मनोहरं ज्ञानमुक्तिसाधनं विचित्रपुण्यवर्धनम् ।
+            शोकमोहदैन्यलोभकोपतापनाशनं प्रयान्ति कालभैरवांघ्रिसन्निधिं नरा ध्रुवम् ॥ ९
+                <span class="tooltiptext"> Those who study these eight verses on Kalabhairava,
+                Which is the source of eternal knowledge,
+                Which increases the effect of righteous deeds,
+                And which destroys grief, passion, poverty, want and anger,
+                Would surely reach the holy presence of Kalabhairava.</span>
+            </span>
         </pre>
-        <div class="button-container">
-            <button onclick="document.getElementById('audio').play()">Play</button>
-            <button onclick="document.getElementById('audio').pause()">Pause</button>
-            <button onclick="document.getElementById('audio').currentTime = 0">Stop</button>
+        <div class="footer">
+            <a href="https://github.com/DigantaDey/Kaal-Bhairav-Astakam" target="_blank">
+                <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Repo">
+            </a>
+            <a href="https://digantadey.in" target="_blank">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/domain.png" alt="Personal Website">
+            </a>
         </div>
+    </div>
+    <div class="audio-player">
         <audio id="audio" controls>
             <source src="Kaal Bhairav Ashtakam.mp3" type="audio/mp3">
             Your browser does not support the audio element.
         </audio>
-        <div class="credit">
-            Audio credit: <a href="https://www.youtube.com/watch?v=xJyiIgAKNJA" target="_blank">YouTube</a>
-        </div>
     </div>
 </body>
 </html>
