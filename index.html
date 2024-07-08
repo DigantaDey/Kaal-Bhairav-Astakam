@@ -26,25 +26,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
             max-width: 800px;
             width: 100%;
-            box-sizing: border-box;
             margin: auto;
-        }
-        .button-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-        button {
-            background-color: #ff4500;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 0 5px;
-        }
-        button:hover {
-            background-color: #d13600;
         }
         .footer {
             margin-top: 20px;
@@ -65,10 +47,11 @@
             height: 24px;
         }
         pre {
-            white-space: pre-wrap; 
+            white-space: pre-wrap;
             word-wrap: break-word;
-            text-align: center; 
-            margin: 0;
+            text-align: center;
+            margin: 0 auto;
+            line-height: 1.8;
         }
         .audio-player {
             position: fixed;
@@ -80,6 +63,15 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
             padding: 10px;
             z-index: 1000;
+            display: flex;
+            align-items: center;
+            cursor: move;
+            width: 300px;
+            user-select: none;
+            resize: none; /* Disable resizing */
+        }
+        .audio-player.hidden {
+            display: none;
         }
         .tooltip {
             display: inline-block;
@@ -95,7 +87,7 @@
             padding: 10px;
             position: absolute;
             z-index: 1;
-            bottom: 125%; /* Position above the tooltip */
+            bottom: 125%;
             left: 50%;
             margin-left: -100px;
             opacity: 0;
@@ -107,120 +99,170 @@
         }
         @media (max-width: 600px) {
             .tooltip .tooltiptext {
-                left: 0;
-                margin-left: 0;
-                width: 90%;
+                left: 50%;
+                margin-left: -90px;
+                width: 180px;
             }
         }
-        /* Specific styles for the first two verses */
         .first-verse-tooltip .tooltiptext,
         .second-verse-tooltip .tooltiptext {
             left: auto;
             right: 50%;
             margin-right: -100px;
         }
+        .youtube-credit {
+            margin-left: 10px;
+        }
+        .youtube-credit img {
+            width: 24px;
+            height: 24px;
+        }
+        .toggle-button {
+            background-color: #ff4500;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+        .toggle-button:hover {
+            background-color: #d13600;
+        }
+        .collapsible {
+            background-color: #444;
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+            margin-top: 10px;
+        }
+        .active, .collapsible:hover {
+            background-color: #555;
+        }
+        .collapsible-content {
+            padding: 0 18px;
+            display: none;
+            overflow: hidden;
+            background-color: #1e1e1e;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
     <div class="content">
         <pre>
-            <span class="tooltip first-verse-tooltip">देवराजसेव्यमानपावनांघ्रिपङ्कजं व्यालयज्ञसूत्रमिन्दुशेखरं कृपाकरम् ।
-            नारदादियोगिवृन्दवन्दितं दिगंबरं काशिकापुराधिनाथकालभैरवं भजे ॥ १॥
-                <span class="tooltiptext">I salute Kalabhairava, the lord of the city of Kasi,
-                Whose lotus like feet is being served by Devendra,
-                Who is merciful and wears the moon on his forehead ,
-                Who wears a snake as his sacred thread,
-                Who wears the different directions as his cloth,
-                And who is worshipped by sages like Narada.</span>
-            </span>
-            
-            <span class="tooltip second-verse-tooltip">भानुकोटिभास्वरं भवाब्धितारकं परं नीलकण्ठमीप्सितार्थदायकं त्रिलोचनम् ।
-            कालकालमंबुजाक्षमक्षशूलमक्षरं काशिकापुराधिनाथकालभैरवं भजे ॥ २॥
-                <span class="tooltiptext">I salute Kalabhairava, the lord of the city of Kasi,
-                Who shines like billions of suns,
-                Who helps us cross this miserable ocean of life,
-                Who is supreme and has a blue neck,
-                Who has three eyes and grants us our desires,
-                Who is the death to the God of death*,
-                Who has lotus flower like eyes,
-                Who has the undefeatable trident,
-                And who does not have decay.</span>
-            </span>
-            
-            <span class="tooltip">शूलटंकपाशदण्डपाणिमादिकारणं श्यामकायमादिदेवमक्षरं निरामयम् ।
-            भीमविक्रमं प्रभुं विचित्रताण्डवप्रियं काशिकापुराधिनाथकालभैरवं भजे ॥ ३॥
-                <span class="tooltiptext">I salute Kalabhairava, the lord of the city of Kasi,
-                Who has a spear, a chord and a stick as weapons,
-                Who is black in colour and the primeval cause,
-                Who is deathless and the first God,
-                Who is free from decay and ill health,
-                Who is the Lord who is a great hero,
-                And who likes the special vigorous thandava*.</span>
-            </span>
-            
-            <span class="tooltip">भुक्तिमुक्तिदायकं प्रशस्तचारुविग्रहं भक्तवत्सलं स्थितं समस्तलोकविग्रहम् ।
-            विनिक्वणन्मनोज्ञहेमकिङ्किणीलसत्कटिं काशिकापुराधिनाथकालभैरवं भजे॥ ४॥
-                <span class="tooltiptext">I salute Kalabhairava, the lord of the city of Kasi,
-                Who fulfills desires and also grants salvation,
-                Who is well known for his pretty mien,
-                Who is a form of Shiva ,who loves his devotees,
-                Who is the God of the entire world,
-                Who assumes various forms,
-                And who has a golden waist thread,
-                On which jingling bells are tied.</span>
-            </span>
-            
-            <span class="tooltip">धर्मसेतुपालकं त्वधर्ममार्गनाशनं कर्मपाशमोचकं सुशर्मधायकं विभुम् ।
-            स्वर्णवर्णशेषपाशशोभितांगमण्डलं काशिकापुराधिनाथकालभैरवं भजे ॥ ५॥
-                <span class="tooltiptext">I salute Kalabhairava, the lord of the city of Kasi,
-                Who maintains the bridge of dharma in life,
-                Who destroys paths which are not right,
-                Who saves us from the ties of Karma,
-                Who is the lord who makes us ashamed ,
-                When trying to do wrong things,
-                Who has a shining body because of golden rope ,
-                With bells tied in various places.</span>
-            </span>
-            
-            <span class="tooltip">रत्नपादुकाप्रभाभिरामपादयुग्मकं नित्यमद्वितीयमिष्टदैवतं निरंजनम् ।
-            मृत्युदर्पनाशनं करालदंष्ट्रमोक्षणं काशिकापुराधिनाथकालभैरवं भजे ॥ ६॥
-                <span class="tooltiptext">I salute Kalabhairava, the lord of the city of Kasi,
-                Who has feet adorned by the shine of gem studded sandals,
-                Who is eternal and does not have any one second to him,
-                Who is our favorite God who bestows everything,
-                Who takes away the fear of death from humans,
-                And who grants them salvation by his terrible teeth.</span>
-            </span>
-            
-            <span class="tooltip">अट्टहासभिन्नपद्मजाण्डकोशसंततिं दृष्टिपात्तनष्टपापजालमुग्रशासनम् ।
-            अष्टसिद्धिदायकं कपालमालिकाधरं काशिकापुराधिनाथकालभैरवं भजे ॥ ७॥
-                <span class="tooltiptext">I salute Kalabhairava, the lord of the city of Kasi,
-                Whose loud roar is enough to destroy all those created by Brahma,
-                Whose sight is sufficient to destroy all sins,
-                Who is crafty and strict ruler,
-                Who can grant the eight occult powers,
-                And who wears the garland of skulls.</span>
-            </span>
-            
-            <span class="tooltip">भूतसंघनायकं विशालकीर्तिदायकं काशिवासलोकपुण्यपापशोधकं विभुम् ।
-            नीतिमार्गकोविदं पुरातनं जगत्पतिं काशिकापुराधिनाथकालभैरवं भजे ॥ ८॥
-                <span class="tooltiptext">I salute Kalabhairava, the lord of the city of Kashi,
-                Who is the chief of the society of Bhoothas,
-                Who grants broad based fame,
-                Who is the lord who judges good and bad deeds,
-                Of those who live in Varanasi,
-                Who is an expert in the way of righteousness,
-                And who is eternally old and lord of the universe.</span>
-            </span>
-            
-            <span class="tooltip">कालभैरवाष्टकं पठंति ये मनोहरं ज्ञानमुक्तिसाधनं विचित्रपुण्यवर्धनम् ।
-            शोकमोहदैन्यलोभकोपतापनाशनं प्रयान्ति कालभैरवांघ्रिसन्निधिं नरा ध्रुवम् ॥ ९
-                <span class="tooltiptext"> Those who study these eight verses on Kalabhairava,
-                Which is the source of eternal knowledge,
-                Which increases the effect of righteous deeds,
-                And which destroys grief, passion, poverty, want and anger,
-                Would surely reach the holy presence of Kalabhairava.</span>
-            </span>
+<span class="collapsible" onclick="toggleCollapse(this)">देवराजसेव्यमानपावनांघ्रिपङ्कजं व्यालयज्ञसूत्रमिन्दुशेखरं कृपाकरम्।
+नारदादियोगिवृन्दवन्दितं दिगंबरं काशिकापुराधिनाथकालभैरवं भजे॥ १॥</span>
+<div class="collapsible-content">
+    <p>I salute Kalabhairava, the lord of the city of Kasi,</p>
+    <p>Whose lotus like feet is being served by Devendra,</p>
+    <p>Who is merciful and wears the moon on his forehead,</p>
+    <p>Who wears a snake as his sacred thread,</p>
+    <p>Who wears the different directions as his cloth,</p>
+    <p>And who is worshipped by sages like Narada.</p>
+</div>
+
+<span class="collapsible" onclick="toggleCollapse(this)">भानुकोटिभास्वरं भवाब्धितारकं परं नीलकण्ठमीप्सितार्थदायकं त्रिलोचनम्।
+कालकालमंबुजाक्षमक्षशूलमक्षरं काशिकापुराधिनाथकालभैरवं भजे॥ २॥</span>
+<div class="collapsible-content">
+    <p>I salute Kalabhairava, the lord of the city of Kasi,</p>
+    <p>Who shines like billions of suns,</p>
+    <p>Who helps us cross this miserable ocean of life,</p>
+    <p>Who is supreme and has a blue neck,</p>
+    <p>Who has three eyes and grants us our desires,</p>
+    <p>Who is the death to the God of death*,</p>
+    <p>Who has lotus flower like eyes,</p>
+    <p>Who has the undefeatable trident,</p>
+    <p>And who does not have decay.</p>
+</div>
+
+<span class="collapsible" onclick="toggleCollapse(this)">शूलटंकपाशदण्डपाणिमादिकारणं श्यामकायमादिदेवमक्षरं निरामयम्।
+भीमविक्रमं प्रभुं विचित्रताण्डवप्रियं काशिकापुराधिनाथकालभैरवं भजे॥ ३॥</span>
+<div class="collapsible-content">
+    <p>I salute Kalabhairava, the lord of the city of Kasi,</p>
+    <p>Who has a spear, a chord and a stick as weapons,</p>
+    <p>Who is black in colour and the primeval cause,</p>
+    <p>Who is deathless and the first God,</p>
+    <p>Who is free from decay and ill health,</p>
+    <p>Who is the Lord who is a great hero,</p>
+    <p>And who likes the special vigorous thandava*.</p>
+</div>
+
+<span class="collapsible" onclick="toggleCollapse(this)">भुक्तिमुक्तिदायकं प्रशस्तचारुविग्रहं भक्तवत्सलं स्थितं समस्तलोकविग्रहम्।
+विनिक्वणन्मनोज्ञहेमकिङ्किणीलसत्कटिं काशिकापुराधिनाथकालभैरवं भजे॥ ४॥</span>
+<div class="collapsible-content">
+    <p>I salute Kalabhairava, the lord of the city of Kasi,</p>
+    <p>Who fulfills desires and also grants salvation,</p>
+    <p>Who is well known for his pretty mien,</p>
+    <p>Who is a form of Shiva ,who loves his devotees,</p>
+    <p>Who is the God of the entire world,</p>
+    <p>Who assumes various forms,</p>
+    <p>And who has a golden waist thread,</p>
+    <p>On which jingling bells are tied.</p>
+</div>
+
+<span class="collapsible" onclick="toggleCollapse(this)">धर्मसेतुपालकं त्वधर्ममार्गनाशनं कर्मपाशमोचकं सुशर्मधायकं विभुम्।
+स्वर्णवर्णशेषपाशशोभितांगमण्डलं काशिकापुराधिनाथकालभैरवं भजे॥ ५॥</span>
+<div class="collapsible-content">
+    <p>I salute Kalabhairava, the lord of the city of Kasi,</p>
+    <p>Who maintains the bridge of dharma in life,</p>
+    <p>Who destroys paths which are not right,</p>
+    <p>Who saves us from the ties of Karma,</p>
+    <p>Who is the lord who makes us ashamed,</p>
+    <p>When trying to do wrong things,</p>
+    <p>Who has a shining body because of golden rope,</p>
+    <p>With bells tied in various places.</p>
+</div>
+
+<span class="collapsible" onclick="toggleCollapse(this)">रत्नपादुकाप्रभाभिरामपादयुग्मकं नित्यमद्वितीयमिष्टदैवतं निरंजनम्।
+मृत्युदर्पनाशनं करालदंष्ट्रमोक्षणं काशिकापुराधिनाथकालभैरवं भजे॥ ६॥</span>
+<div class="collapsible-content">
+    <p>I salute Kalabhairava, the lord of the city of Kasi,</p>
+    <p>Who has feet adorned by the shine of gem studded sandals,</p>
+    <p>Who is eternal and does not have any one second to him,</p>
+    <p>Who is our favorite God who bestows everything,</p>
+    <p>Who takes away the fear of death from humans,</p>
+    <p>And who grants them salvation by his terrible teeth.</p>
+</div>
+
+<span class="collapsible" onclick="toggleCollapse(this)">अट्टहासभिन्नपद्मजाण्डकोशसंततिं दृष्टिपात्तनष्टपापजालमुग्रशासनम्।
+अष्टसिद्धिदायकं कपालमालिकाधरं काशिकापुराधिनाथकालभैरवं भजे॥ ७॥</span>
+<div class="collapsible-content">
+    <p>I salute Kalabhairava, the lord of the city of Kasi,</p>
+    <p>Whose loud roar is enough to destroy all those created by Brahma,</p>
+    <p>Whose sight is sufficient to destroy all sins,</p>
+    <p>Who is crafty and strict ruler,</p>
+    <p>Who can grant the eight occult powers,</p>
+    <p>And who wears the garland of skulls.</p>
+</div>
+
+<span class="collapsible" onclick="toggleCollapse(this)">भूतसंघनायकं विशालकीर्तिदायकं काशिवासलोकपुण्यपापशोधकं विभुम्।
+नीतिमार्गकोविदं पुरातनं जगत्पतिं काशिकापुराधिनाथकालभैरवं भजे॥ ८॥</span>
+<div class="collapsible-content">
+    <p>I salute Kalabhairava, the lord of the city of Kashi,</p>
+    <p>Who is the chief of the society of Bhoothas,</p>
+    <p>Who grants broad based fame,</p>
+    <p>Who is the lord who judges good and bad deeds,</p>
+    <p>Of those who live in Varanasi,</p>
+    <p>Who is an expert in the way of righteousness,</p>
+    <p>And who is eternally old and lord of the universe.</p>
+</div>
+
+<span class="collapsible" onclick="toggleCollapse(this)">कालभैरवाष्टकं पठंति ये मनोहरं ज्ञानमुक्तिसाधनं विचित्रपुण्यवर्धनम्।
+शोकमोहदैन्यलोभकोपतापनाशनं प्रयान्ति कालभैरवांघ्रिसन्निधिं नरा ध्रुवम्॥ ९</span>
+<div class="collapsible-content">
+    <p>Those who study these eight verses on Kalabhairava,</p>
+    <p>Which is the source of eternal knowledge,</p>
+    <p>Which increases the effect of righteous deeds,</p>
+    <p>And which destroys grief, passion, poverty, want and anger,</p>
+    <p>Would surely reach the holy presence of Kalabhairava.</p>
+</div>
         </pre>
         <div class="footer">
             <a href="https://github.com/DigantaDey/Kaal-Bhairav-Astakam" target="_blank">
@@ -231,11 +273,76 @@
             </a>
         </div>
     </div>
-    <div class="audio-player">
+    <div class="audio-player" id="audio-player">
         <audio id="audio" controls>
             <source src="Kaal Bhairav Ashtakam.mp3" type="audio/mp3">
             Your browser does not support the audio element.
         </audio>
+        <div class="youtube-credit">
+            <a href="https://www.youtube.com/watch?v=xJyiIgAKNJA" target="_blank">
+                <img src="https://img.icons8.com/ios-filled/50/ffffff/youtube-play.png" alt="YouTube">
+            </a>
+        </div>
+        <button class="toggle-button" onclick="toggleAudioPlayer()"><<</button>
     </div>
+    <button class="toggle-button" id="toggle-show-button" onclick="toggleAudioPlayer()">>></button>
+    <script>
+        function toggleAudioPlayer() {
+            const player = document.getElementById('audio-player');
+            const toggleShowButton = document.getElementById('toggle-show-button');
+            
+            if (player.classList.contains('hidden')) {
+                player.classList.remove('hidden');
+                toggleShowButton.style.display = 'none';
+            } else {
+                player.classList.add('hidden');
+                toggleShowButton.style.display = 'block';
+                toggleShowButton.style.position = 'fixed';
+                toggleShowButton.style.bottom = '20px';
+                toggleShowButton.style.right = '20px';
+            }
+        }
+
+        // Make the audio player movable
+        const player = document.getElementById('audio-player');
+        let offsetX, offsetY;
+
+        player.addEventListener('mousedown', function(e) {
+            if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'AUDIO' && e.target.tagName !== 'A') {
+                e.preventDefault();
+                offsetX = e.clientX - player.getBoundingClientRect().left;
+                offsetY = e.clientY - player.getBoundingClientRect().top;
+
+                function moveAt(pageX, pageY) {
+                    player.style.left = pageX - offsetX + 'px';
+                    player.style.top = pageY - offsetY + 'px';
+                }
+
+                function onMouseMove(event) {
+                    moveAt(event.pageX, event.pageY);
+                }
+
+                document.addEventListener('mousemove', onMouseMove);
+
+                document.addEventListener('mouseup', function() {
+                    document.removeEventListener('mousemove', onMouseMove);
+                }, { once: true });
+            }
+        });
+
+        player.ondragstart = function() {
+            return false;
+        };
+
+        function toggleCollapse(element) {
+            element.classList.toggle("active");
+            const content = element.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        }
+    </script>
 </body>
 </html>
