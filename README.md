@@ -8,6 +8,7 @@ This repository hosts a web page for the recitation and display of the Kaal Bhai
 - Play, pause, and stop controls for the recitation audio
 - Thematic UI design to enhance the spiritual experience
 - Credits to the original YouTube audio source
+- Movable audio player box to customize the viewing experience
 
 ## Live Site
 
