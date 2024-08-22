@@ -64,9 +64,11 @@
             display: flex;
             align-items: center;
             cursor: move;
-            width: 408px;
+            width: 100%;
+            max-width: 408px;
             height: 100px;
             user-select: none;
+            box-sizing: border-box;
         }
         .audio-player.hidden {
             display: none;
@@ -75,11 +77,13 @@
             background-color: #ff4500;
             color: white;
             border: none;
-            padding: 5px 10px;
+            padding: 5px;
             border-radius: 5px;
             cursor: pointer;
             font-size: 14px;
             margin-left: 10px;
+            display: flex;
+            align-items: center;
         }
         .toggle-button:hover {
             background-color: #d13600;
@@ -127,6 +131,25 @@
         @media only screen and (min-width: 1024px) {
             .qr-code-container {
                 display: block;
+            }
+        }
+        @media (max-width: 600px) {
+            .audio-player {
+                width: calc(100% - 40px);
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+                padding: 5px;
+                height: auto;
+            }
+            .toggle-button {
+                font-size: 12px;
+                margin-left: 5px;
+                padding: 3px;
+            }
+            .toggle-button img {
+                width: 12px;
+                height: 10px;
             }
         }
     </style>
@@ -310,6 +333,9 @@
                         break;
                     case 'h':
                         toggleAudioPlayer();
+                        break;
+                    case 'm':
+                        audio.muted = !audio.muted;
                         break;
                 }
             }
