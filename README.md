@@ -5,10 +5,17 @@ This repository hosts a web page for the recitation and display of the Kaal Bhai
 ## Features
 
 - Full text of the Kaal Bhairav Ashtakam in Sanskrit
-- Play, pause, and stop controls for the recitation audio
+- Language selector supporting English and Bengali translations
+- Responsive, movable audio player with the following controls:
+  - Play, pause, and stop the recitation audio
+  - Volume control with the arrow keys
+  - Forward and backward controls using the arrow keys
+  - Looping toggle with the 'L' key
+  - Mute/unmute with the 'M' key
+  - Show/hide the player with the 'H' key
 - Thematic UI design to enhance the spiritual experience
 - Credits to the original YouTube audio source
-- Movable audio player box to customize the viewing experience
+- QR code for easy access to the live site on mobile devices
 
 ## Live Site
 
