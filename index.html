@@ -26,7 +26,6 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
             max-width: 800px;
             width: 100%;
-            margin: auto;
         }
         .footer {
             margin-top: 20px;
@@ -49,9 +48,8 @@
         pre {
             white-space: pre-wrap;
             word-wrap: break-word;
-            text-align: center;
-            margin: 0 auto;
             line-height: 1.8;
+            margin: 0;
         }
         .audio-player {
             position: fixed;
@@ -66,60 +64,12 @@
             display: flex;
             align-items: center;
             cursor: move;
-            width: 300px;
+            width: 408px;
+            height: 100px;
             user-select: none;
-            resize: none; /* Disable resizing */
-            max-width: 300px; /* Ensure the width is fixed */
-            min-width: 300px; /* Ensure the width is fixed */
-            max-height: 100px; /* Ensure the height is fixed */
-            min-height: 100px; /* Ensure the height is fixed */
         }
         .audio-player.hidden {
             display: none;
-        }
-        .tooltip {
-            display: inline-block;
-            position: relative;
-        }
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 200px;
-            background-color: #555;
-            color: #fff;
-            text-align: left;
-            border-radius: 5px;
-            padding: 10px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -100px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
-        }
-        @media (max-width: 600px) {
-            .tooltip .tooltiptext {
-                left: 50%;
-                margin-left: -90px;
-                width: 180px;
-            }
-        }
-        .first-verse-tooltip .tooltiptext,
-        .second-verse-tooltip .tooltiptext {
-            left: auto;
-            right: 50%;
-            margin-right: -100px;
-        }
-        .youtube-credit {
-            margin-left: 10px;
-        }
-        .youtube-credit img {
-            width: 24px;
-            height: 24px;
         }
         .toggle-button {
             background-color: #ff4500;
@@ -134,6 +84,10 @@
         .toggle-button:hover {
             background-color: #d13600;
         }
+        .toggle-button img {
+            width: 15px;
+            height: 13px;
+        }
         .collapsible {
             background-color: #444;
             color: white;
@@ -146,47 +100,45 @@
             font-size: 15px;
             margin-top: 10px;
         }
-        .active, .collapsible:hover {
+        .collapsible:hover,
+        .collapsible.active {
             background-color: #555;
         }
         .collapsible-content {
             padding: 0 18px;
             display: none;
-            overflow: hidden;
             background-color: #1e1e1e;
             margin-top: 5px;
         }
         .translation {
-            font-size: 18px; /* Increase this value to make the text larger */
-            line-height: 1.6; /* Adjust line-height for better readability */
+            font-size: 18px;
+            line-height: 1.6;
         }
         .qr-code-container {
-    display: none; /* Hide by default */
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    background-color: #1e1e1e;
-    padding: 10px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-}
-
-@media only screen and (min-width: 1024px) {
-    .qr-code-container {
-        display: block; /* Show on screens wider than 1024px */
-    }
-}
-
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #1e1e1e;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+        @media only screen and (min-width: 1024px) {
+            .qr-code-container {
+                display: block;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="language-selector">
-    <label for="language">Select Language:</label>
-    <select id="language" onchange="changeLanguage()">
-        <option value="en">English</option>
-        <option value="bn">Bengali</option>
-    </select>
-</div>
+        <label for="language">Select Language:</label>
+        <select id="language" onchange="changeLanguage()">
+            <option value="en">English</option>
+            <option value="bn">Bengali</option>
+        </select>
+    </div>
 
     <div class="content">
         <pre>
@@ -253,6 +205,7 @@
             </a>
         </div>
     </div>
+
     <div class="audio-player" id="audio-player">
         <audio id="audio" controls playsinline>
             <source src="Kaal Bhairav Ashtakam.mp3" type="audio/mp3">
@@ -264,132 +217,126 @@
             </a>
         </div>
         <button class="toggle-button" onclick="toggleAudioPlayer()"><<</button>
+        <button class="toggle-button" onclick="toggleLoop()" id="loop-button">
+            <img src="https://img.icons8.com/ios-glyphs/24/ffffff/repeat.png" alt="Loop Icon" id="loop-icon">
+        </button>
     </div>
+
     <div class="qr-code-container">
-    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://digantadey.github.io/Kaal-Bhairav-Astakam/" alt="QR Code to Kaal Bhairav Ashtakam">
-</div>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://digantadey.github.io/Kaal-Bhairav-Astakam/" alt="QR Code to Kaal Bhairav Ashtakam">
+    </div>
 
     <button class="toggle-button" id="toggle-show-button" onclick="toggleAudioPlayer()">>></button>
     <script>
+        const translations = {
+            en: [
+                "I salute Kalabhairava, the lord of the city of Kasi, whose lotus-like feet are served by Devendra, who is merciful and wears the moon on his forehead, who wears a snake as his sacred thread, who wears the different directions as his cloth, and who is worshipped by sages like Narada.",
+                "I salute Kalabhairava, the lord of the city of Kasi, who shines like billions of suns, who helps us cross this miserable ocean of life, who is supreme and has a blue neck, who has three eyes and grants us our desires, who is the death to the God of death, who has lotus flower-like eyes, who has the undefeatable trident, and who does not have decay.",
+                "I salute Kalabhairava, the lord of the city of Kasi, who has a spear, a chord, and a stick as weapons, who is black in color and the primeval cause, who is deathless and the first God, who is free from decay and ill health, who is the Lord who is a great hero, and who likes the special vigorous thandava.",
+                "I salute Kalabhairava, the lord of the city of Kasi, who fulfills desires and also grants salvation, who is well known for his pretty mien, who is a form of Shiva, who loves his devotees, who is the God of the entire world, who assumes various forms, and who has a golden waist thread, on which jingling bells are tied.",
+                "I salute Kalabhairava, the lord of the city of Kasi, who maintains the bridge of dharma in life, who destroys paths that are not right, who saves us from the ties of Karma, who is the lord who makes us ashamed when trying to do wrong things, who has a shining body because of the golden rope, with bells tied in various places.",
+                "I salute Kalabhairava, the lord of the city of Kasi, who has feet adorned by the shine of gem-studded sandals, who is eternal and does not have anyone second to him, who is our favorite God who bestows everything, who takes away the fear of death from humans, and who grants them salvation by his terrible teeth.",
+                "I salute Kalabhairava, the lord of the city of Kasi, whose loud roar is enough to destroy all those created by Brahma, whose sight is sufficient to destroy all sins, who is crafty and a strict ruler, who can grant the eight occult powers, and who wears the garland of skulls.",
+                "I salute Kalabhairava, the lord of the city of Kashi, who is the chief of the society of Bhoothas, who grants broad-based fame, who is the lord who judges good and bad deeds, of those who live in Varanasi, who is an expert in the way of righteousness, and who is eternally old and lord of the universe.",
+                "Those who study these eight verses on Kalabhairava, which is the source of eternal knowledge, which increases the effect of righteous deeds, and which destroys grief, passion, poverty, want, and anger, would surely reach the holy presence of Kalabhairava."
+            ],
+            bn: [
+                "আমি কালভৈরবের স্তুতি গাই, যিনি পদ্মের শাসনকর্তা, যিনি নগরের শাসনকর্তা। যার চরণ ইন্দ্র (দেবরাজ) দ্বারা পূজনীয় ও সেবা করা হয়, যাঁর যজ্ঞ-সুতো সাপ দ্বারা গঠিত, যাঁর কপালে চন্দ্র রয়েছে, যিনি করুণার আবাস, যিনি নারদ এবং অন্যান্য স্বর্গীয় গায়কদের দ্বারা গাওয়া হয়েছে, এবং যার পোশাকের দিক নির্দেশনা।",
+                "আমি কালভৈরবের স্তব গাই, যিনি কাশী নগরের অধিপতি, যিনি কোটি সূর্যের মতো দীপ্তিময়, যিনি পুনর্জন্মের সাগরকে বিলুপ্ত করেন, যিনি সর্বোত্তম, যিনি নীল গলার অধিকারী, যিনি আমাদের কামনা দান করেন, যাঁর তিন চক্ষু আছে, যিনি কালের অন্ত, যাঁর পদ্মসদৃশ চক্ষু আছে, যাঁর অমর একক অস্ত্র আছে এবং যিনি অমর।",
+                "আমি কালভৈরবের স্তুতি গাই, যিনি কাশী নগরের অধিপতি, যাঁর হাতে মনোদন্ড, কোদাল, একটি দড়ি এবং শাস্তি রয়েছে, যিনি শুরুর পিছনে কারণ, যিনি ধূসর (গন্ধযুক্ত) দেহের অধিকারী, যিনি প্রথম দেব, যিনি অবিনশ্বর, যিনি অসুস্থতা ও স্বাস্থ্য থেকে মুক্ত, যিনি পরাক্রমশালী, যিনি প্রভু এবং যিনি বিশেষ তাণ্ডব নৃত্য পছন্দ করেন।",
+                "আমি কালভৈরবের স্তুতি গাই, যিনি কাশী নগরের অধিপতি, যিনি কামনা ও মোক্ষের দাতা, যিনি লোভনীয় রূপ ধারণ করেন, যিনি তাঁর ভক্তদের স্নেহশীল, যিনি স্থির, যিনি বিভিন্ন প্রকাশ ধারণ করেন এবং জগৎ গঠন করেন, এবং যার একটি সুন্দর সোনালী কোমর-সুতো রয়েছে যার সাথে ছোট সুরেলা ঘণ্টা রয়েছে।",
+                "আমি কালভৈরবের স্তব গাই, যিনি কাশী নগরের অধিপতি, যিনি ন্যায়ের রক্ষক, যিনি অধার্মিক পথের বিনাশকারী, যিনি আমাদের কর্ম বা কর্মের বন্ধন থেকে মুক্ত করেন, যিনি আমাদের লজ্জা দান করেন, যিনি অপূর্ব, এবং যার অঙ্গ-দলগুলি সোনালী রঙের একটি সুন্দর দড়ি দিয়ে সজ্জিত।",
+                "আমি কালভৈরবের স্তুতি গাই, যিনি কাশী নগরের অধিপতি, যিনি সোনার তৈরি দুটি চন্দন দ্বারা শোভিত চরণে দীপ্তিময়, যিনি চিরন্তন, যিনি অপ্রতিরোধ্য, যিনি আমাদের কামনা দান করেন, যিনি মুক্ত। কামনা, যিনি মৃত্যুর অহংকারকে ধ্বংস করেন (যেমন মৃত্যুতে সর্বোচ্চ), এবং যিনি তাঁর দাঁত দিয়ে আত্মাকে মুক্ত করেন।",
+                "আমি কালভৈরবের স্তুতি গাই, যিনি কাশী নগরের অধিপতি, যাঁর উচ্চ গর্জন পদ্ম-জন্মিত ব্রহ্মার দ্বারা সৃষ্ট সমস্ত প্রকাশ বিনষ্ট করার জন্য যথেষ্ট, যাঁর (দয়াময়) দৃষ্টি সমস্ত পাপ বিনাশ করার জন্য যথেষ্ট, যিনি শক্তিমান শাসক, যিনি অষ্ট-শক্তি দান করেন, এবং যিনি মাথার খুলির মালা পরেন।",
+                "আমি কালভৈরবের স্তুতি করি, যিনি কাশী শহরের অধিপতি, যিনি ভূত ও আত্মার নেতা, যিনি অপার মহিমা বর্ষণ করেন, যিনি কাশীতে বসবাসকারী মানুষকে তাদের পাপ ও সৎকর্ম থেকে মুক্ত করেন, যিনি মহিমা, যিনি ধার্মিকতার পথ ব্যাখ্যা করেছেন, যিনি চিরকালের পুরাতন, যিনি বিশ্বজগতের নিয়ন্ত্রক।",
+                "যাঁরা কালভৈরবের এই আটটি শ্লোক অধ্যয়ন করেন - যা লোভনীয়, যা জ্ঞান ও মুক্তির উত্স, যা ব্যক্তির ন্যায়পরায়ণতা বৃদ্ধি করে এবং যা দুঃখ, আসক্তি, হতাশা, লোভ, ক্রোধ এবং উত্তাপকে ধ্বংস করে - তারা কালভৈরবের সান্নিধ্যের দিকে অগ্রসর হয়। শিবের চরণ (কালভৈরব), অগত্যা।"
+            ]
+        };
+        let isLooping = false;
+        let isPlayerHidden = false;
+
+        function changeLanguage() {
+            const selectedLanguage = document.getElementById('language').value;
+            document.querySelectorAll('.translation').forEach((element, index) => {
+                element.textContent = translations[selectedLanguage][index];
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', changeLanguage);
+
         function toggleAudioPlayer() {
-    const player = document.getElementById('audio-player');
-    const toggleShowButton = document.getElementById('toggle-show-button');
-
-    if (player.classList.contains('hidden')) {
-        player.classList.remove('hidden');
-        toggleShowButton.style.display = 'none';
-    } else {
-        player.classList.add('hidden');
-        toggleShowButton.style.display = 'block';
-        toggleShowButton.style.position = 'fixed';
-        toggleShowButton.style.bottom = '20px';
-        toggleShowButton.style.right = '20px';
-    }
-}
-
-// Make the audio player movable
-const player = document.getElementById('audio-player');
-const translations = {
-    en: [
-        "I salute Kalabhairava, the lord of the city of Kasi, whose lotus-like feet are served by Devendra, who is merciful and wears the moon on his forehead, who wears a snake as his sacred thread, who wears the different directions as his cloth, and who is worshipped by sages like Narada.",
-        "I salute Kalabhairava, the lord of the city of Kasi, who shines like billions of suns, who helps us cross this miserable ocean of life, who is supreme and has a blue neck, who has three eyes and grants us our desires, who is the death to the God of death, who has lotus flower-like eyes, who has the undefeatable trident, and who does not have decay.",
-        "I salute Kalabhairava, the lord of the city of Kasi, who has a spear, a chord, and a stick as weapons, who is black in color and the primeval cause, who is deathless and the first God, who is free from decay and ill health, who is the Lord who is a great hero, and who likes the special vigorous thandava.",
-        "I salute Kalabhairava, the lord of the city of Kasi, who fulfills desires and also grants salvation, who is well known for his pretty mien, who is a form of Shiva, who loves his devotees, who is the God of the entire world, who assumes various forms, and who has a golden waist thread, on which jingling bells are tied.",
-        "I salute Kalabhairava, the lord of the city of Kasi, who maintains the bridge of dharma in life, who destroys paths that are not right, who saves us from the ties of Karma, who is the lord who makes us ashamed when trying to do wrong things, who has a shining body because of the golden rope, with bells tied in various places.",
-        "I salute Kalabhairava, the lord of the city of Kasi, who has feet adorned by the shine of gem-studded sandals, who is eternal and does not have anyone second to him, who is our favorite God who bestows everything, who takes away the fear of death from humans, and who grants them salvation by his terrible teeth.",
-        "I salute Kalabhairava, the lord of the city of Kasi, whose loud roar is enough to destroy all those created by Brahma, whose sight is sufficient to destroy all sins, who is crafty and a strict ruler, who can grant the eight occult powers, and who wears the garland of skulls.",
-        "I salute Kalabhairava, the lord of the city of Kashi, who is the chief of the society of Bhoothas, who grants broad-based fame, who is the lord who judges good and bad deeds, of those who live in Varanasi, who is an expert in the way of righteousness, and who is eternally old and lord of the universe.",
-        "Those who study these eight verses on Kalabhairava, which is the source of eternal knowledge, which increases the effect of righteous deeds, and which destroys grief, passion, poverty, want, and anger, would surely reach the holy presence of Kalabhairava."
-    ],
-    bn: [
-        "আমি কালভৈরবের স্তুতি গাই, যিনি পদ্মের শাসনকর্তা, যিনি নগরের শাসনকর্তা। যার চরণ ইন্দ্র (দেবরাজ) দ্বারা পূজনীয় ও সেবা করা হয়, যাঁর যজ্ঞ-সুতো সাপ দ্বারা গঠিত, যাঁর কপালে চন্দ্র রয়েছে, যিনি করুণার আবাস, যিনি নারদ এবং অন্যান্য স্বর্গীয় গায়কদের দ্বারা গাওয়া হয়েছে, এবং যার পোশাকের দিক নির্দেশনা।",
-        "আমি কালভৈরবের স্তব গাই, যিনি কাশী নগরের অধিপতি, যিনি কোটি সূর্যের মতো দীপ্তিময়, যিনি পুনর্জন্মের সাগরকে বিলুপ্ত করেন, যিনি সর্বোত্তম, যিনি নীল গলার অধিকারী, যিনি আমাদের কামনা দান করেন, যাঁর তিন চক্ষু আছে, যিনি কালের অন্ত, যাঁর পদ্মসদৃশ চক্ষু আছে, যাঁর অমর একক অস্ত্র আছে এবং যিনি অমর।",
-        "আমি কালভৈরবের স্তুতি গাই, যিনি কাশী নগরের অধিপতি, যাঁর হাতে মনোদন্ড, কোদাল, একটি দড়ি এবং শাস্তি রয়েছে, যিনি শুরুর পিছনে কারণ, যিনি ধূসর (গন্ধযুক্ত) দেহের অধিকারী, যিনি প্রথম দেব, যিনি অবিনশ্বর, যিনি অসুস্থতা ও স্বাস্থ্য থেকে মুক্ত, যিনি পরাক্রমশালী, যিনি প্রভু এবং যিনি বিশেষ তাণ্ডব নৃত্য পছন্দ করেন।",
-        "আমি কালভৈরবের স্তুতি গাই, যিনি কাশী নগরের অধিপতি, যিনি কামনা ও মোক্ষের দাতা, যিনি লোভনীয় রূপ ধারণ করেন, যিনি তাঁর ভক্তদের স্নেহশীল, যিনি স্থির, যিনি বিভিন্ন প্রকাশ ধারণ করেন এবং জগৎ গঠন করেন, এবং যার একটি সুন্দর সোনালী কোমর-সুতো রয়েছে যার সাথে ছোট সুরেলা ঘণ্টা রয়েছে।",
-        "আমি কালভৈরবের স্তব গাই, যিনি কাশী নগরের অধিপতি, যিনি ন্যায়ের রক্ষক, যিনি অধার্মিক পথের বিনাশকারী, যিনি আমাদের কর্ম বা কর্মের বন্ধন থেকে মুক্ত করেন, যিনি আমাদের লজ্জা দান করেন, যিনি অপূর্ব, এবং যার অঙ্গ-দলগুলি সোনালী রঙের একটি সুন্দর দড়ি দিয়ে সজ্জিত।",
-        "আমি কালভৈরবের স্তুতি গাই, যিনি কাশী নগরের অধিপতি, যিনি সোনার তৈরি দুটি চন্দন দ্বারা শোভিত চরণে দীপ্তিময়, যিনি চিরন্তন, যিনি অপ্রতিরোধ্য, যিনি আমাদের কামনা দান করেন, যিনি মুক্ত। কামনা, যিনি মৃত্যুর অহংকারকে ধ্বংস করেন (যেমন মৃত্যুতে সর্বোচ্চ), এবং যিনি তাঁর দাঁত দিয়ে আত্মাকে মুক্ত করেন।",
-        "আমি কালভৈরবের স্তুতি গাই, যিনি কাশী নগরের অধিপতি, যাঁর উচ্চ গর্জন পদ্ম-জন্মিত ব্রহ্মার দ্বারা সৃষ্ট সমস্ত প্রকাশ বিনষ্ট করার জন্য যথেষ্ট, যাঁর (দয়াময়) দৃষ্টি সমস্ত পাপ বিনাশ করার জন্য যথেষ্ট, যিনি শক্তিমান শাসক, যিনি অষ্ট-শক্তি দান করেন, এবং যিনি মাথার খুলির মালা পরেন।",
-        "আমি কালভৈরবের স্তুতি করি, যিনি কাশী শহরের অধিপতি, যিনি ভূত ও আত্মার নেতা, যিনি অপার মহিমা বর্ষণ করেন, যিনি কাশীতে বসবাসকারী মানুষকে তাদের পাপ ও সৎকর্ম থেকে মুক্ত করেন, যিনি মহিমা, যিনি ধার্মিকতার পথ ব্যাখ্যা করেছেন, যিনি চিরকালের পুরাতন, যিনি বিশ্বজগতের নিয়ন্ত্রক।",
-        "যাঁরা কালভৈরবের এই আটটি শ্লোক অধ্যয়ন করেন - যা লোভনীয়, যা জ্ঞান ও মুক্তির উত্স, যা ব্যক্তির ন্যায়পরায়ণতা বৃদ্ধি করে এবং যা দুঃখ, আসক্তি, হতাশা, লোভ, ক্রোধ এবং উত্তাপকে ধ্বংস করে - তারা কালভৈরবের সান্নিধ্যের দিকে অগ্রসর হয়। শিবের চরণ (কালভৈরব), অগত্যা।"
-    ]
-};
-let offsetX, offsetY;
-
-function changeLanguage() {
-    const selectedLanguage = document.getElementById('language').value;
-    const translationElements = document.querySelectorAll('.translation');
-    
-    translationElements.forEach((element, index) => {
-        element.textContent = translations[selectedLanguage][index];
-    });
-}
-
-// Initialize with default language
-document.addEventListener('DOMContentLoaded', () => {
-    changeLanguage();
-});
-
-
-player.addEventListener('mousedown', function(e) {
-    if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'AUDIO' && e.target.tagName !== 'A') {
-        e.preventDefault();
-        offsetX = e.clientX - player.getBoundingClientRect().left;
-        offsetY = e.clientY - player.getBoundingClientRect().top;
-
-        function moveAt(pageX, pageY) {
-            let newLeft = pageX - offsetX;
-            let newTop = pageY - offsetY;
-
-            // Boundary checks
-            const playerWidth = player.offsetWidth;
-            const playerHeight = player.offsetHeight;
-            const windowWidth = window.innerWidth;
-            const windowHeight = window.innerHeight;
-
-            // Ensure the player does not go outside the left or right bounds
-            if (newLeft < 0) {
-                newLeft = 0;
-            } else if (newLeft + playerWidth > windowWidth) {
-                newLeft = windowWidth - playerWidth;
-            }
-
-            // Ensure the player does not go outside the top or bottom bounds
-            if (newTop < 0) {
-                newTop = 0;
-            } else if (newTop + playerHeight > windowHeight) {
-                newTop = windowHeight - playerHeight;
-            }
-
-            player.style.left = newLeft + 'px';
-            player.style.top = newTop + 'px';
+            const player = document.getElementById('audio-player');
+            const toggleShowButton = document.getElementById('toggle-show-button');
+            isPlayerHidden = !isPlayerHidden;
+            player.classList.toggle('hidden', isPlayerHidden);
+            toggleShowButton.style.display = isPlayerHidden ? 'block' : 'none';
         }
-
-        function onMouseMove(event) {
-            moveAt(event.pageX, event.pageY);
-        }
-
-        document.addEventListener('mousemove', onMouseMove);
-
-        document.addEventListener('mouseup', function() {
-            document.removeEventListener('mousemove', onMouseMove);
-        }, { once: true });
-    }
-});
-
-player.ondragstart = function() {
-    return false;
-};
-
 
         function toggleCollapse(element) {
-            element.classList.toggle("active");
-            const content = element.nextElementSibling;
-            if (content.style.display === "block") {
-                content.style.display = "none";
-            } else {
-                content.style.display = "block";
-            }
+            element.classList.toggle('active');
+            element.nextElementSibling.style.display = element.classList.contains('active') ? 'block' : 'none';
         }
+
+        function toggleLoop() {
+            const audio = document.getElementById('audio');
+            const loopIcon = document.getElementById('loop-icon');
+            isLooping = !isLooping;
+            audio.loop = isLooping;
+            loopIcon.src = isLooping ? "https://img.icons8.com/ios-glyphs/24/ff4500/repeat.png" : "https://img.icons8.com/ios-glyphs/24/ffffff/repeat.png";
+        }
+
+        document.addEventListener('keydown', function(event) {
+            const audio = document.getElementById('audio');
+            if (event.target.tagName !== 'INPUT') {
+                switch(event.key) {
+                    case ' ':
+                        event.preventDefault();
+                        audio.paused ? audio.play() : audio.pause();
+                        break;
+                    case 'ArrowUp':
+                        audio.volume = Math.min(audio.volume + 0.1, 1);
+                        break;
+                    case 'ArrowDown':
+                        audio.volume = Math.max(audio.volume - 0.1, 0);
+                        break;
+                    case 'ArrowRight':
+                        audio.currentTime = Math.min(audio.currentTime + 5, audio.duration);
+                        break;
+                    case 'ArrowLeft':
+                        audio.currentTime = Math.max(audio.currentTime - 5, 0);
+                        break;
+                    case 'l':
+                        toggleLoop();
+                        break;
+                    case 'h':
+                        toggleAudioPlayer();
+                        break;
+                }
+            }
+        });
+
+        // Make the audio player movable
+        const player = document.getElementById('audio-player');
+        player.addEventListener('mousedown', function(e) {
+            if (!['BUTTON', 'AUDIO', 'A'].includes(e.target.tagName)) {
+                e.preventDefault();
+                let offsetX = e.clientX - player.getBoundingClientRect().left;
+                let offsetY = e.clientY - player.getBoundingClientRect().top;
+
+                function onMouseMove(event) {
+                    let newLeft = Math.max(0, Math.min(event.pageX - offsetX, window.innerWidth - player.offsetWidth));
+                    let newTop = Math.max(0, Math.min(event.pageY - offsetY, window.innerHeight - player.offsetHeight));
+                    player.style.left = `${newLeft}px`;
+                    player.style.top = `${newTop}px`;
+                }
+
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', () => document.removeEventListener('mousemove', onMouseMove), { once: true });
+            }
+        });
+
+        player.ondragstart = () => false;
+
     </script>
 </body>
 </html>
