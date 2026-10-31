@@ -1,368 +1,477 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>कालभैरवाष्टकं</title>
-    <style>
-        body {
-            font-family: 'Noto Sans', sans-serif;
-            background-color: #282828;
-            color: #fff;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            text-align: center;
-            min-height: 100vh;
-            box-sizing: border-box;
-        }
-        .content {
-            background-color: #1e1e1e;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            max-width: 800px;
-            width: 100%;
-        }
-        .footer {
-            margin-top: 20px;
-            font-size: 14px;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-        .footer a {
-            color: #ff4500;
-            text-decoration: none;
-        }
-        .footer a:hover {
-            text-decoration: underline;
-        }
-        .footer img {
-            width: 24px;
-            height: 24px;
-        }
-        pre {
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            line-height: 1.8;
-            margin: 0;
-        }
-        .audio-player {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #1e1e1e;
-            border: 1px solid #ff4500;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            padding: 10px;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            cursor: move;
-            width: 100%;
-            max-width: 408px;
-            height: 100px;
-            user-select: none;
-            box-sizing: border-box;
-        }
-        .audio-player.hidden {
-            display: none;
-        }
-        .toggle-button {
-            background-color: #ff4500;
-            color: white;
-            border: none;
-            padding: 5px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-left: 10px;
-            display: flex;
-            align-items: center;
-        }
-        .toggle-button:hover {
-            background-color: #d13600;
-        }
-        .toggle-button img {
-            width: 15px;
-            height: 13px;
-        }
-        .collapsible {
-            background-color: #444;
-            color: white;
-            cursor: pointer;
-            padding: 10px;
-            width: 100%;
-            border: none;
-            text-align: left;
-            outline: none;
-            font-size: 15px;
-            margin-top: 10px;
-        }
-        .collapsible:hover,
-        .collapsible.active {
-            background-color: #555;
-        }
-        .collapsible-content {
-            padding: 0 18px;
-            display: none;
-            background-color: #1e1e1e;
-            margin-top: 5px;
-        }
-        .translation {
-            font-size: 18px;
-            line-height: 1.6;
-        }
-        .qr-code-container {
-            display: none;
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            background-color: #1e1e1e;
-            padding: 10px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-        }
-        @media only screen and (min-width: 1024px) {
-            .qr-code-container {
-                display: block;
-            }
-        }
-        @media (max-width: 600px) {
-            .audio-player {
-                width: calc(100% - 40px);
-                bottom: 10px;
-                right: 10px;
-                left: 10px;
-                padding: 5px;
-                height: auto;
-            }
-            .toggle-button {
-                font-size: 12px;
-                margin-left: 5px;
-                padding: 3px;
-            }
-            .toggle-button img {
-                width: 12px;
-                height: 10px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>कालभैरवाष्टकं · Kaal Bhairav Ashtakam</title>
+<meta name="description" content="The Kaal Bhairav Ashtakam — eight Sanskrit verses in praise of Lord Kālabhairava, with English and Bengali meanings, IAST transliteration, and a full recitation.">
+<meta name="theme-color" content="#0a090c" id="meta-theme">
+<meta name="color-scheme" content="dark light">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="कालभैरवाष्टकं · Kaal Bhairav Ashtakam">
+<meta property="og:description" content="Eight Sanskrit verses in praise of Lord Kālabhairava, with English and Bengali meanings and a full recitation.">
+<meta property="og:url" content="https://digantadey.github.io/Kaal-Bhairav-Astakam/">
+<meta name="twitter:card" content="summary">
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=Noto+Sans+Bengali:wght@400..600&family=Noto+Serif+Devanagari:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="language-selector">
-        <label for="language">Select Language:</label>
-        <select id="language" onchange="changeLanguage()">
-            <option value="en">English</option>
-            <option value="bn">Bengali</option>
-        </select>
-    </div>
+<a class="skip-link" href="#main">Skip to the verses</a>
 
-    <div class="content">
-        <pre>
-<span class="collapsible" onclick="toggleCollapse(this)">देवराजसेव्यमानपावनांघ्रिपङ्कजं व्यालयज्ञसूत्रमिन्दुशेखरं कृपाकरम्।
-नारदादियोगिवृन्दवन्दितं दिगंबरं काशिकापुराधिनाथकालभैरवं भजे॥ १॥</span>
-<div class="collapsible-content">
-    <p class="translation"></p>
-</div>
+<!-- Reusable icon sprite -->
+<svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+  <symbol id="i-trident" viewBox="0 0 24 24">
+    <path d="M12 3v18" />
+    <path d="M12 15c-3.2 0-5-2-5-5.5V4.5" />
+    <path d="M12 15c3.2 0 5-2 5-5.5V4.5" />
+    <path d="M8.6 19.2h6.8" />
+  </symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.2v13.6L19.2 12z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><rect x="6.5" y="5" width="3.6" height="14" rx="1" fill="currentColor" stroke="none"/><rect x="13.9" y="5" width="3.6" height="14" rx="1" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-loop" viewBox="0 0 24 24"><path d="M17 2.5 21 6.5l-4 4"/><path d="M3 11.5v-1a4 4 0 0 1 4-4h14"/><path d="M7 21.5 3 17.5l4-4"/><path d="M21 12.5v1a4 4 0 0 1-4 4H3"/></symbol>
+  <symbol id="i-volume" viewBox="0 0 24 24"><path d="M4 9.5h3.2L12 5.4v13.2L7.2 14.5H4z" stroke-linejoin="round"/><path d="M15.6 9a4.2 4.2 0 0 1 0 6"/><path d="M18.2 6.4a7.8 7.8 0 0 1 0 11.2"/></symbol>
+  <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9.5h3.2L12 5.4v13.2L7.2 14.5H4z" stroke-linejoin="round"/><path d="m16 9.5 5 5"/><path d="m21 9.5-5 5"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-grip" viewBox="0 0 24 24"><g fill="currentColor" stroke="none"><circle cx="9" cy="6" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="18" r="1.4"/></g></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2z" stroke-linejoin="round"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.4 9.3a2.7 2.7 0 0 1 5.2.9c0 1.8-2.6 2-2.6 3.8"/><circle cx="12" cy="17.2" r="1" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V6.5l10-2v11"/><circle cx="6.6" cy="18" r="2.6"/><circle cx="16.6" cy="15.5" r="2.6"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+  <symbol id="i-github" viewBox="0 0 24 24"><path d="M9 19.5c-4 1.2-4-2-5.5-2.5m11 5v-3.4c0-1 .1-1.4-.5-2 2.3-.3 4.5-1.2 4.5-5.2a4 4 0 0 0-1.1-2.8 3.7 3.7 0 0 0-.1-2.8s-1.1-.3-3.4 1.2a11.6 11.6 0 0 0-6 0C5.6 4.5 4.5 4.8 4.5 4.8a3.7 3.7 0 0 0-.1 2.8A4 4 0 0 0 3.3 10c0 4 2.2 4.9 4.5 5.2-.6.6-.6 1.2-.5 2v3.4" transform="translate(1.5 .5)"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10.5 13.5a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.4 1.4"/><path d="M13.5 10.5a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.4-1.4"/></symbol>
+</svg>
 
-<span class="collapsible" onclick="toggleCollapse(this)">भानुकोटिभास्वरं भवाब्धितारकं परं नीलकण्ठमीप्सितार्थदायकं त्रिलोचनम्।
-कालकालमंबुजाक्षमक्षशूलमक्षरं काशिकापुराधिनाथकालभैरवं भजे॥ २॥</span>
-<div class="collapsible-content">
-    <p class="translation"></p>
-</div>
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="#top">
+      <span class="brand__mark" aria-hidden="true">
+        <svg class="icon icon--brand"><use href="#i-trident"/></svg>
+      </span>
+      <span class="brand__text">
+        <span class="brand__sa" lang="sa">कालभैरवाष्टकं</span>
+        <span class="brand__en">Kaal Bhairav Ashtakam</span>
+      </span>
+    </a>
 
-<span class="collapsible" onclick="toggleCollapse(this)">शूलटंकपाशदण्डपाणिमादिकारणं श्यामकायमादिदेवमक्षरं निरामयम्।
-भीमविक्रमं प्रभुं विचित्रताण्डवप्रियं काशिकापुराधिनाथकालभैरवं भजे॥ ३॥</span>
-<div class="collapsible-content">
-    <p class="translation"></p>
-</div>
+    <nav class="header-actions" aria-label="Preferences">
+      <div class="segmented segmented--lang" role="group" aria-label="Meaning language">
+        <button type="button" class="segmented__btn" data-lang="en" aria-pressed="true">EN</button>
+        <button type="button" class="segmented__btn" data-lang="bn" aria-pressed="false" lang="bn">বাংলা</button>
+      </div>
+      <button type="button" class="icon-btn" id="theme-toggle" aria-label="Switch to light theme" title="Toggle theme">
+        <svg class="icon icon--sun"><use href="#i-sun"/></svg>
+        <svg class="icon icon--moon"><use href="#i-moon"/></svg>
+      </button>
+      <button type="button" class="icon-btn" id="help-btn" aria-label="Keyboard shortcuts" title="Keyboard shortcuts (?)">
+        <svg class="icon"><use href="#i-help"/></svg>
+      </button>
+    </nav>
+  </div>
+</header>
 
-<span class="collapsible" onclick="toggleCollapse(this)">भुक्तिमुक्तिदायकं प्रशस्तचारुविग्रहं भक्तवत्सलं स्थितं समस्तलोकविग्रहम्।
-विनिक्वणन्मनोज्ञहेमकिङ्किणीलसत्कटिं काशिकापुराधिनाथकालभैरवं भजे॥ ४॥</span>
-<div class="collapsible-content">
-    <p class="translation"></p>
-</div>
-
-<span class="collapsible" onclick="toggleCollapse(this)">धर्मसेतुपालकं त्वधर्ममार्गनाशनं कर्मपाशमोचकं सुशर्मधायकं विभुम्।
-स्वर्णवर्णशेषपाशशोभितांगमण्डलं काशिकापुराधिनाथकालभैरवं भजे॥ ५॥</span>
-<div class="collapsible-content">
-    <p class="translation"></p>
-</div>
-
-<span class="collapsible" onclick="toggleCollapse(this)">रत्नपादुकाप्रभाभिरामपादयुग्मकं नित्यमद्वितीयमिष्टदैवतं निरंजनम्।
-मृत्युदर्पनाशनं करालदंष्ट्रमोक्षणं काशिकापुराधिनाथकालभैरवं भजे॥ ६॥</span>
-<div class="collapsible-content">
-    <p class="translation"></p>
-</div>
-
-<span class="collapsible" onclick="toggleCollapse(this)">अट्टहासभिन्नपद्मजाण्डकोशसंततिं दृष्टिपात्तनष्टपापजालमुग्रशासनम्।
-अष्टसिद्धिदायकं कपालमालिकाधरं काशिकापुराधिनाथकालभैरवं भजे॥ ७॥</span>
-<div class="collapsible-content">
-    <p class="translation"></p>
-</div>
-
-<span class="collapsible" onclick="toggleCollapse(this)">भूतसंघनायकं विशालकीर्तिदायकं काशिवासलोकपुण्यपापशोधकं विभुम्।
-नीतिमार्गकोविदं पुरातनं जगत्पतिं काशिकापुराधिनाथकालभैरवं भजे॥ ८॥</span>
-<div class="collapsible-content">
-    <p class="translation"></p>
-</div>
-
-<span class="collapsible" onclick="toggleCollapse(this)">कालभैरवाष्टकं पठंति ये मनोहरं ज्ञानमुक्तिसाधनं विचित्रपुण्यवर्धनम्।
-शोकमोहदैन्यलोभकोपतापनाशनं प्रयान्ति कालभैरवांघ्रिसन्निधिं नरा ध्रुवम्॥ ९</span>
-<div class="collapsible-content">
-    <p class="translation"></p>
-</div>
-        </pre>
-        <div class="footer">
-            <a href="https://github.com/DigantaDey/Kaal-Bhairav-Astakam" target="_blank">
-                <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub Repo">
-            </a>
-            <a href="https://digantadey.in" target="_blank">
-                <img src="https://img.icons8.com/ios-filled/50/ffffff/domain.png" alt="Personal Website">
-            </a>
-        </div>
-    </div>
-
-    <div class="audio-player" id="audio-player">
-        <audio id="audio" controls playsinline>
-            <source src="Kaal Bhairav Ashtakam.mp3" type="audio/mp3">
-            Your browser does not support the audio element.
-        </audio>
-        <div class="youtube-credit">
-            <a href="https://www.youtube.com/watch?v=xJyiIgAKNJA" target="_blank">
-                <img src="https://img.icons8.com/ios-filled/50/ffffff/youtube-play.png" alt="YouTube">
-            </a>
-        </div>
-        <button class="toggle-button" onclick="toggleAudioPlayer()"><<</button>
-        <button class="toggle-button" onclick="toggleLoop()" id="loop-button">
-            <img src="https://img.icons8.com/ios-glyphs/24/ffffff/repeat.png" alt="Loop Icon" id="loop-icon">
+<main id="main">
+  <section class="hero" id="top" aria-labelledby="hero-title">
+    <div class="hero__glow" aria-hidden="true"></div>
+    <div class="wrap hero__inner">
+      <p class="hero__kicker">Kāśī · Eight verses of praise</p>
+      <h1 class="hero__title" id="hero-title">
+        <span class="hero__sa" lang="sa">कालभैरवाष्टकं</span>
+        <span class="hero__en">Kaal Bhairav Ashtakam</span>
+      </h1>
+      <div class="ornament" aria-hidden="true">
+        <span class="ornament__line"></span>
+        <svg class="ornament__dot" viewBox="0 0 24 24"><path d="M12 2.5l2.4 7.1 7.1 2.4-7.1 2.4L12 21.5l-2.4-7.1-7.1-2.4 7.1-2.4z"/></svg>
+        <span class="ornament__line"></span>
+      </div>
+      <p class="hero__lede">
+        Eight Sanskrit verses in praise of Kālabhairava — lord of Kāśī, guardian of thresholds,
+        and the one who devours time itself.
+      </p>
+      <div class="hero__actions">
+        <button type="button" class="btn btn--primary" id="hero-play" aria-pressed="false">
+          <svg class="icon hero-play__play"><use href="#i-play"/></svg>
+          <svg class="icon hero-play__pause"><use href="#i-pause"/></svg>
+          <span>Listen to the recitation</span>
         </button>
+        <a class="btn btn--ghost" href="#verse-1">Read the verses</a>
+      </div>
+      <ul class="hero__chips">
+        <li>8 verses + phalaśruti</li>
+        <li>Sanskrit · IAST</li>
+        <li>English · Bengali</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="reader" aria-labelledby="reader-title">
+    <h2 class="sr-only" id="reader-title">The verses</h2>
+
+    <div class="wrap">
+      <div class="toolbar" role="toolbar" aria-label="Reading options">
+        <div class="toolbar__group">
+          <button type="button" class="chip" id="meanings-toggle" aria-pressed="false">
+            <span>Show meanings</span>
+          </button>
+        </div>
+        <div class="toolbar__group" role="group" aria-label="Text size">
+          <span class="toolbar__label">Text</span>
+          <button type="button" class="chip chip--square" id="size-down" aria-label="Decrease text size">A<sup>−</sup></button>
+          <button type="button" class="chip chip--square" id="size-up" aria-label="Increase text size">A<sup>+</sup></button>
+        </div>
+        <div class="toolbar__group">
+          <button type="button" class="chip" id="iast-toggle" aria-pressed="false">Roman script</button>
+        </div>
+      </div>
+
+      <div class="verse-list" id="verse-list">
+        <article class="verse" id="verse-1">
+          <header class="verse__head">
+            <span class="verse__num" aria-hidden="true">१</span>
+            <span class="verse__label">Verse 1</span>
+            <button type="button" class="verse__toggle" aria-label="Meaning" aria-expanded="false" aria-controls="meaning-1">
+              <span>Meaning</span>
+              <svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg>
+            </button>
+          </header>
+          <div class="verse__text" lang="sa">
+            <span class="sa-line">देवराजसेव्यमानपावनांघ्रिपङ्कजं व्यालयज्ञसूत्रमिन्दुशेखरं कृपाकरम्।</span>
+            <span class="sa-line">नारदादियोगिवृन्दवन्दितं दिगंबरं काशिकापुराधिनाथकालभैरवं भजे ॥ १ ॥</span>
+          </div>
+          <div class="verse__iast" lang="sa-Latn">
+            <span class="iast-line">devarāja-sevyamāna-pāvanāṅghri-paṅkajaṁ</span>
+            <span class="iast-line">vyāla-yajña-sūtram indu-śekharaṁ kṛpākaram |</span>
+            <span class="iast-line">nāradādi-yogivṛnda-vanditaṁ digambaraṁ</span>
+            <span class="iast-line">kāśikā-purādhinātha-kālabhairavaṁ bhaje || 1 ||</span>
+          </div>
+          <div class="meaning" id="meaning-1" hidden>
+            <p class="meaning__text" lang="en"></p>
+          </div>
+        </article>
+
+        <article class="verse" id="verse-2">
+          <header class="verse__head">
+            <span class="verse__num" aria-hidden="true">२</span>
+            <span class="verse__label">Verse 2</span>
+            <button type="button" class="verse__toggle" aria-label="Meaning" aria-expanded="false" aria-controls="meaning-2">
+              <span>Meaning</span>
+              <svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg>
+            </button>
+          </header>
+          <div class="verse__text" lang="sa">
+            <span class="sa-line">भानुकोटिभास्वरं भवाब्धितारकं परं नीलकण्ठमीप्सितार्थदायकं त्रिलोचनम्।</span>
+            <span class="sa-line">कालकालमंबुजाक्षमक्षशूलमक्षरं काशिकापुराधिनाथकालभैरवं भजे ॥ २ ॥</span>
+          </div>
+          <div class="verse__iast" lang="sa-Latn">
+            <span class="iast-line">bhānukoṭi-bhāsvaraṁ bhavābdhi-tārakaṁ paraṁ</span>
+            <span class="iast-line">nīlakaṇṭham īpsitārtha-dāyakaṁ trilocanam |</span>
+            <span class="iast-line">kālakālam ambujākṣam akṣa-śūlam akṣaraṁ</span>
+            <span class="iast-line">kāśikā-purādhinātha-kālabhairavaṁ bhaje || 2 ||</span>
+          </div>
+          <div class="meaning" id="meaning-2" hidden>
+            <p class="meaning__text" lang="en"></p>
+          </div>
+        </article>
+
+        <article class="verse" id="verse-3">
+          <header class="verse__head">
+            <span class="verse__num" aria-hidden="true">३</span>
+            <span class="verse__label">Verse 3</span>
+            <button type="button" class="verse__toggle" aria-label="Meaning" aria-expanded="false" aria-controls="meaning-3">
+              <span>Meaning</span>
+              <svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg>
+            </button>
+          </header>
+          <div class="verse__text" lang="sa">
+            <span class="sa-line">शूलटंकपाशदण्डपाणिमादिकारणं श्यामकायमादिदेवमक्षरं निरामयम्।</span>
+            <span class="sa-line">भीमविक्रमं प्रभुं विचित्रताण्डवप्रियं काशिकापुराधिनाथकालभैरवं भजे ॥ ३ ॥</span>
+          </div>
+          <div class="verse__iast" lang="sa-Latn">
+            <span class="iast-line">śūla-ṭaṅka-pāśa-daṇḍa-pāṇim ādi-kāraṇaṁ</span>
+            <span class="iast-line">śyāma-kāyam ādi-devam akṣaraṁ nirāmayam |</span>
+            <span class="iast-line">bhīma-vikramaṁ prabhuṁ vicitra-tāṇḍava-priyaṁ</span>
+            <span class="iast-line">kāśikā-purādhinātha-kālabhairavaṁ bhaje || 3 ||</span>
+          </div>
+          <div class="meaning" id="meaning-3" hidden>
+            <p class="meaning__text" lang="en"></p>
+          </div>
+        </article>
+
+        <article class="verse" id="verse-4">
+          <header class="verse__head">
+            <span class="verse__num" aria-hidden="true">४</span>
+            <span class="verse__label">Verse 4</span>
+            <button type="button" class="verse__toggle" aria-label="Meaning" aria-expanded="false" aria-controls="meaning-4">
+              <span>Meaning</span>
+              <svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg>
+            </button>
+          </header>
+          <div class="verse__text" lang="sa">
+            <span class="sa-line">भुक्तिमुक्तिदायकं प्रशस्तचारुविग्रहं भक्तवत्सलं स्थितं समस्तलोकविग्रहम्।</span>
+            <span class="sa-line">विनिक्वणन्मनोज्ञहेमकिङ्किणीलसत्कटिं काशिकापुराधिनाथकालभैरवं भजे ॥ ४ ॥</span>
+          </div>
+          <div class="verse__iast" lang="sa-Latn">
+            <span class="iast-line">bhukti-mukti-dāyakaṁ praśasta-cāru-vigrahaṁ</span>
+            <span class="iast-line">bhaktavatsalaṁ sthitaṁ samasta-loka-vigraham |</span>
+            <span class="iast-line">vinikvaṇan-manojña-hema-kiṅkiṇī-lasat-kaṭiṁ</span>
+            <span class="iast-line">kāśikā-purādhinātha-kālabhairavaṁ bhaje || 4 ||</span>
+          </div>
+          <div class="meaning" id="meaning-4" hidden>
+            <p class="meaning__text" lang="en"></p>
+          </div>
+        </article>
+
+        <article class="verse" id="verse-5">
+          <header class="verse__head">
+            <span class="verse__num" aria-hidden="true">५</span>
+            <span class="verse__label">Verse 5</span>
+            <button type="button" class="verse__toggle" aria-label="Meaning" aria-expanded="false" aria-controls="meaning-5">
+              <span>Meaning</span>
+              <svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg>
+            </button>
+          </header>
+          <div class="verse__text" lang="sa">
+            <span class="sa-line">धर्मसेतुपालकं त्वधर्ममार्गनाशनं कर्मपाशमोचकं सुशर्मधायकं विभुम्।</span>
+            <span class="sa-line">स्वर्णवर्णशेषपाशशोभितांगमण्डलं काशिकापुराधिनाथकालभैरवं भजे ॥ ५ ॥</span>
+          </div>
+          <div class="verse__iast" lang="sa-Latn">
+            <span class="iast-line">dharma-setu-pālakaṁ tv adharma-mārga-nāśanaṁ</span>
+            <span class="iast-line">karma-pāśa-mocakaṁ suśarma-dhāyakaṁ vibhum |</span>
+            <span class="iast-line">svarṇa-varṇa-śeṣa-pāśa-śobhitāṅga-maṇḍalaṁ</span>
+            <span class="iast-line">kāśikā-purādhinātha-kālabhairavaṁ bhaje || 5 ||</span>
+          </div>
+          <div class="meaning" id="meaning-5" hidden>
+            <p class="meaning__text" lang="en"></p>
+          </div>
+        </article>
+
+        <article class="verse" id="verse-6">
+          <header class="verse__head">
+            <span class="verse__num" aria-hidden="true">६</span>
+            <span class="verse__label">Verse 6</span>
+            <button type="button" class="verse__toggle" aria-label="Meaning" aria-expanded="false" aria-controls="meaning-6">
+              <span>Meaning</span>
+              <svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg>
+            </button>
+          </header>
+          <div class="verse__text" lang="sa">
+            <span class="sa-line">रत्नपादुकाप्रभाभिरामपादयुग्मकं नित्यमद्वितीयमिष्टदैवतं निरंजनम्।</span>
+            <span class="sa-line">मृत्युदर्पनाशनं करालदंष्ट्रमोक्षणं काशिकापुराधिनाथकालभैरवं भजे ॥ ६ ॥</span>
+          </div>
+          <div class="verse__iast" lang="sa-Latn">
+            <span class="iast-line">ratna-pādukā-prabhābhirāma-pāda-yugmakaṁ</span>
+            <span class="iast-line">nityam advitīyam iṣṭa-daivataṁ nirañjanam |</span>
+            <span class="iast-line">mṛtyu-darpa-nāśanaṁ karāla-daṁṣṭra-mokṣaṇaṁ</span>
+            <span class="iast-line">kāśikā-purādhinātha-kālabhairavaṁ bhaje || 6 ||</span>
+          </div>
+          <div class="meaning" id="meaning-6" hidden>
+            <p class="meaning__text" lang="en"></p>
+          </div>
+        </article>
+
+        <article class="verse" id="verse-7">
+          <header class="verse__head">
+            <span class="verse__num" aria-hidden="true">७</span>
+            <span class="verse__label">Verse 7</span>
+            <button type="button" class="verse__toggle" aria-label="Meaning" aria-expanded="false" aria-controls="meaning-7">
+              <span>Meaning</span>
+              <svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg>
+            </button>
+          </header>
+          <div class="verse__text" lang="sa">
+            <span class="sa-line">अट्टहासभिन्नपद्मजाण्डकोशसंततिं दृष्टिपात्तनष्टपापजालमुग्रशासनम्।</span>
+            <span class="sa-line">अष्टसिद्धिदायकं कपालमालिकाधरं काशिकापुराधिनाथकालभैरवं भजे ॥ ७ ॥</span>
+          </div>
+          <div class="verse__iast" lang="sa-Latn">
+            <span class="iast-line">aṭṭahāsa-bhinna-padmajāṇḍa-kośa-santatiṁ</span>
+            <span class="iast-line">dṛṣṭipāta-naṣṭa-pāpa-jāla-mugra-śāsanam |</span>
+            <span class="iast-line">aṣṭa-siddhi-dāyakaṁ kapāla-mālikā-dharaṁ</span>
+            <span class="iast-line">kāśikā-purādhinātha-kālabhairavaṁ bhaje || 7 ||</span>
+          </div>
+          <div class="meaning" id="meaning-7" hidden>
+            <p class="meaning__text" lang="en"></p>
+          </div>
+        </article>
+
+        <article class="verse" id="verse-8">
+          <header class="verse__head">
+            <span class="verse__num" aria-hidden="true">८</span>
+            <span class="verse__label">Verse 8</span>
+            <button type="button" class="verse__toggle" aria-label="Meaning" aria-expanded="false" aria-controls="meaning-8">
+              <span>Meaning</span>
+              <svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg>
+            </button>
+          </header>
+          <div class="verse__text" lang="sa">
+            <span class="sa-line">भूतसंघनायकं विशालकीर्तिदायकं काशिवासलोकपुण्यपापशोधकं विभुम्।</span>
+            <span class="sa-line">नीतिमार्गकोविदं पुरातनं जगत्पतिं काशिकापुराधिनाथकालभैरवं भजे ॥ ८ ॥</span>
+          </div>
+          <div class="verse__iast" lang="sa-Latn">
+            <span class="iast-line">bhūta-saṅgha-nāyakaṁ viśāla-kīrti-dāyakaṁ</span>
+            <span class="iast-line">kāśi-vāsa-loka-puṇya-pāpa-śodhakaṁ vibhum |</span>
+            <span class="iast-line">nīti-mārga-kovidaṁ purātanaṁ jagat-patiṁ</span>
+            <span class="iast-line">kāśikā-purādhinātha-kālabhairavaṁ bhaje || 8 ||</span>
+          </div>
+          <div class="meaning" id="meaning-8" hidden>
+            <p class="meaning__text" lang="en"></p>
+          </div>
+        </article>
+
+        <article class="verse verse--phala" id="verse-9">
+          <header class="verse__head">
+            <span class="verse__num" aria-hidden="true">९</span>
+            <span class="verse__label">Verse 9 · Phalaśruti</span>
+            <button type="button" class="verse__toggle" aria-label="Meaning" aria-expanded="false" aria-controls="meaning-9">
+              <span>Meaning</span>
+              <svg class="icon" aria-hidden="true"><use href="#i-chevron"/></svg>
+            </button>
+          </header>
+          <div class="verse__text" lang="sa">
+            <span class="sa-line">कालभैरवाष्टकं पठंति ये मनोहरं ज्ञानमुक्तिसाधनं विचित्रपुण्यवर्धनम्।</span>
+            <span class="sa-line">शोकमोहदैन्यलोभकोपतापनाशनं प्रयान्ति कालभैरवांघ्रिसन्निधिं नरा ध्रुवम् ॥ ९ ॥</span>
+          </div>
+          <div class="verse__iast" lang="sa-Latn">
+            <span class="iast-line">kālabhairavāṣṭakaṁ paṭhanti ye manoharaṁ</span>
+            <span class="iast-line">jñāna-mukti-sādhanaṁ vicitra-puṇya-vardhanam |</span>
+            <span class="iast-line">śoka-moha-dainya-lobha-kopa-tāpa-nāśanaṁ</span>
+            <span class="iast-line">prayānti kālabhairavāṅghri-sannidhiṁ narā dhruvam || 9 ||</span>
+          </div>
+          <div class="meaning" id="meaning-9" hidden>
+            <p class="meaning__text" lang="en"></p>
+          </div>
+        </article>
+      </div>
+
+      <noscript>
+        <p class="noscript-note">
+          The meanings, language switch and audio controls need JavaScript. The Sanskrit text above is fully readable without it.
+        </p>
+      </noscript>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__main">
+      <div class="footer-block">
+        <h2 class="footer-block__title">Credits</h2>
+        <p>
+          Recitation sourced from
+          <a href="https://www.youtube.com/watch?v=xJyiIgAKNJA" target="_blank" rel="noopener">this YouTube video</a>.
+          The verses are traditional; the translations are offered as an aid to reading, not as a scholarly edition.
+        </p>
+      </div>
+      <div class="footer-block">
+        <h2 class="footer-block__title">Elsewhere</h2>
+        <ul class="footer-links">
+          <li>
+            <a href="https://github.com/DigantaDey/Kaal-Bhairav-Astakam" target="_blank" rel="noopener">
+              <svg class="icon"><use href="#i-github"/></svg> Source on GitHub
+            </a>
+          </li>
+          <li>
+            <a href="https://digantadey.in" target="_blank" rel="noopener">
+              <svg class="icon"><use href="#i-link"/></svg> digantadey.in
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
 
-    <div class="qr-code-container">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://digantadey.github.io/Kaal-Bhairav-Astakam/" alt="QR Code to Kaal Bhairav Ashtakam">
+    <aside class="qr-card" aria-label="QR code for this page">
+      <img class="qr-card__img"
+           src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&amp;margin=0&amp;data=https%3A%2F%2Fdigantadey.github.io%2FKaal-Bhairav-Astakam%2F"
+           alt="QR code linking to the Kaal Bhairav Ashtakam page"
+           width="180" height="180" loading="lazy" referrerpolicy="no-referrer">
+      <p class="qr-card__caption">Scan to open on your phone</p>
+    </aside>
+  </div>
+  <div class="wrap site-footer__base">
+    <p>Made with devotion · <span id="year">2026</span></p>
+    <p class="site-footer__note">Press <kbd>?</kbd> for keyboard shortcuts</p>
+  </div>
+</footer>
+
+<!-- Audio player -->
+<section class="player" id="player" aria-label="Audio player">
+  <button type="button" class="player__grab" id="player-grab" aria-label="Drag to move player" title="Drag to move">
+    <svg class="icon"><use href="#i-grip"/></svg>
+  </button>
+
+  <button type="button" class="player__play" id="play-btn" aria-label="Play">
+    <svg class="icon icon--play"><use href="#i-play"/></svg>
+    <svg class="icon icon--pause"><use href="#i-pause"/></svg>
+  </button>
+
+  <div class="player__center">
+    <div class="player__meta">
+      <span class="player__title" lang="sa">कालभैरवाष्टकं</span>
+      <span class="player__state" id="player-state" aria-live="polite">Ready</span>
     </div>
+    <input class="seek" id="seek" type="range" min="0" max="1000" step="1" value="0"
+           aria-label="Seek through the recitation" aria-valuetext="0:00">
+    <div class="player__times">
+      <span id="time-current">0:00</span>
+      <span class="player__sep" aria-hidden="true">/</span>
+      <span id="time-total">--:--</span>
+    </div>
+  </div>
 
-    <button class="toggle-button" id="toggle-show-button" onclick="toggleAudioPlayer()">>></button>
-    <script>
-        const translations = {
-            en: [
-                "I salute Kalabhairava, the lord of the city of Kasi, whose lotus-like feet are served by Devendra, who is merciful and wears the moon on his forehead, who wears a snake as his sacred thread, who wears the different directions as his cloth, and who is worshipped by sages like Narada.",
-                "I salute Kalabhairava, the lord of the city of Kasi, who shines like billions of suns, who helps us cross this miserable ocean of life, who is supreme and has a blue neck, who has three eyes and grants us our desires, who is the death to the God of death, who has lotus flower-like eyes, who has the undefeatable trident, and who does not have decay.",
-                "I salute Kalabhairava, the lord of the city of Kasi, who has a spear, a chord, and a stick as weapons, who is black in color and the primeval cause, who is deathless and the first God, who is free from decay and ill health, who is the Lord who is a great hero, and who likes the special vigorous thandava.",
-                "I salute Kalabhairava, the lord of the city of Kasi, who fulfills desires and also grants salvation, who is well known for his pretty mien, who is a form of Shiva, who loves his devotees, who is the God of the entire world, who assumes various forms, and who has a golden waist thread, on which jingling bells are tied.",
-                "I salute Kalabhairava, the lord of the city of Kasi, who maintains the bridge of dharma in life, who destroys paths that are not right, who saves us from the ties of Karma, who is the lord who makes us ashamed when trying to do wrong things, who has a shining body because of the golden rope, with bells tied in various places.",
-                "I salute Kalabhairava, the lord of the city of Kasi, who has feet adorned by the shine of gem-studded sandals, who is eternal and does not have anyone second to him, who is our favorite God who bestows everything, who takes away the fear of death from humans, and who grants them salvation by his terrible teeth.",
-                "I salute Kalabhairava, the lord of the city of Kasi, whose loud roar is enough to destroy all those created by Brahma, whose sight is sufficient to destroy all sins, who is crafty and a strict ruler, who can grant the eight occult powers, and who wears the garland of skulls.",
-                "I salute Kalabhairava, the lord of the city of Kashi, who is the chief of the society of Bhoothas, who grants broad-based fame, who is the lord who judges good and bad deeds, of those who live in Varanasi, who is an expert in the way of righteousness, and who is eternally old and lord of the universe.",
-                "Those who study these eight verses on Kalabhairava, which is the source of eternal knowledge, which increases the effect of righteous deeds, and which destroys grief, passion, poverty, want, and anger, would surely reach the holy presence of Kalabhairava."
-            ],
-            bn: [
-                "আমি কালভৈরবের স্তুতি গাই, যিনি পদ্মের শাসনকর্তা, যিনি নগরের শাসনকর্তা। যার চরণ ইন্দ্র (দেবরাজ) দ্বারা পূজনীয় ও সেবা করা হয়, যাঁর যজ্ঞ-সুতো সাপ দ্বারা গঠিত, যাঁর কপালে চন্দ্র রয়েছে, যিনি করুণার আবাস, যিনি নারদ এবং অন্যান্য স্বর্গীয় গায়কদের দ্বারা গাওয়া হয়েছে, এবং যার পোশাকের দিক নির্দেশনা।",
-                "আমি কালভৈরবের স্তব গাই, যিনি কাশী নগরের অধিপতি, যিনি কোটি সূর্যের মতো দীপ্তিময়, যিনি পুনর্জন্মের সাগরকে বিলুপ্ত করেন, যিনি সর্বোত্তম, যিনি নীল গলার অধিকারী, যিনি আমাদের কামনা দান করেন, যাঁর তিন চক্ষু আছে, যিনি কালের অন্ত, যাঁর পদ্মসদৃশ চক্ষু আছে, যাঁর অমর একক অস্ত্র আছে এবং যিনি অমর।",
-                "আমি কালভৈরবের স্তুতি গাই, যিনি কাশী নগরের অধিপতি, যাঁর হাতে মনোদন্ড, কোদাল, একটি দড়ি এবং শাস্তি রয়েছে, যিনি শুরুর পিছনে কারণ, যিনি ধূসর (গন্ধযুক্ত) দেহের অধিকারী, যিনি প্রথম দেব, যিনি অবিনশ্বর, যিনি অসুস্থতা ও স্বাস্থ্য থেকে মুক্ত, যিনি পরাক্রমশালী, যিনি প্রভু এবং যিনি বিশেষ তাণ্ডব নৃত্য পছন্দ করেন।",
-                "আমি কালভৈরবের স্তুতি গাই, যিনি কাশী নগরের অধিপতি, যিনি কামনা ও মোক্ষের দাতা, যিনি লোভনীয় রূপ ধারণ করেন, যিনি তাঁর ভক্তদের স্নেহশীল, যিনি স্থির, যিনি বিভিন্ন প্রকাশ ধারণ করেন এবং জগৎ গঠন করেন, এবং যার একটি সুন্দর সোনালী কোমর-সুতো রয়েছে যার সাথে ছোট সুরেলা ঘণ্টা রয়েছে।",
-                "আমি কালভৈরবের স্তব গাই, যিনি কাশী নগরের অধিপতি, যিনি ন্যায়ের রক্ষক, যিনি অধার্মিক পথের বিনাশকারী, যিনি আমাদের কর্ম বা কর্মের বন্ধন থেকে মুক্ত করেন, যিনি আমাদের লজ্জা দান করেন, যিনি অপূর্ব, এবং যার অঙ্গ-দলগুলি সোনালী রঙের একটি সুন্দর দড়ি দিয়ে সজ্জিত।",
-                "আমি কালভৈরবের স্তুতি গাই, যিনি কাশী নগরের অধিপতি, যিনি সোনার তৈরি দুটি চন্দন দ্বারা শোভিত চরণে দীপ্তিময়, যিনি চিরন্তন, যিনি অপ্রতিরোধ্য, যিনি আমাদের কামনা দান করেন, যিনি মুক্ত। কামনা, যিনি মৃত্যুর অহংকারকে ধ্বংস করেন (যেমন মৃত্যুতে সর্বোচ্চ), এবং যিনি তাঁর দাঁত দিয়ে আত্মাকে মুক্ত করেন।",
-                "আমি কালভৈরবের স্তুতি গাই, যিনি কাশী নগরের অধিপতি, যাঁর উচ্চ গর্জন পদ্ম-জন্মিত ব্রহ্মার দ্বারা সৃষ্ট সমস্ত প্রকাশ বিনষ্ট করার জন্য যথেষ্ট, যাঁর (দয়াময়) দৃষ্টি সমস্ত পাপ বিনাশ করার জন্য যথেষ্ট, যিনি শক্তিমান শাসক, যিনি অষ্ট-শক্তি দান করেন, এবং যিনি মাথার খুলির মালা পরেন।",
-                "আমি কালভৈরবের স্তুতি করি, যিনি কাশী শহরের অধিপতি, যিনি ভূত ও আত্মার নেতা, যিনি অপার মহিমা বর্ষণ করেন, যিনি কাশীতে বসবাসকারী মানুষকে তাদের পাপ ও সৎকর্ম থেকে মুক্ত করেন, যিনি মহিমা, যিনি ধার্মিকতার পথ ব্যাখ্যা করেছেন, যিনি চিরকালের পুরাতন, যিনি বিশ্বজগতের নিয়ন্ত্রক।",
-                "যাঁরা কালভৈরবের এই আটটি শ্লোক অধ্যয়ন করেন - যা লোভনীয়, যা জ্ঞান ও মুক্তির উত্স, যা ব্যক্তির ন্যায়পরায়ণতা বৃদ্ধি করে এবং যা দুঃখ, আসক্তি, হতাশা, লোভ, ক্রোধ এবং উত্তাপকে ধ্বংস করে - তারা কালভৈরবের সান্নিধ্যের দিকে অগ্রসর হয়। শিবের চরণ (কালভৈরব), অগত্যা।"
-            ]
-        };
-        let isLooping = false;
-        let isPlayerHidden = false;
+  <div class="player__actions">
+    <button type="button" class="pbtn" id="loop-btn" aria-label="Loop recitation" aria-pressed="false" title="Loop (L)">
+      <svg class="icon"><use href="#i-loop"/></svg>
+    </button>
+    <button type="button" class="pbtn" id="mute-btn" aria-label="Mute" aria-pressed="false" title="Mute (M)">
+      <svg class="icon icon--vol"><use href="#i-volume"/></svg>
+      <svg class="icon icon--muted"><use href="#i-mute"/></svg>
+    </button>
+    <input class="volume" id="volume" type="range" min="0" max="100" step="1" value="90" aria-label="Volume">
+    <span class="select">
+      <select id="speed" aria-label="Playback speed">
+        <option value="0.75">0.75×</option>
+        <option value="1" selected>1×</option>
+        <option value="1.25">1.25×</option>
+        <option value="1.5">1.5×</option>
+      </select>
+      <svg class="icon select__chev"><use href="#i-chevron"/></svg>
+    </span>
+    <button type="button" class="pbtn pbtn--min" id="min-btn" aria-label="Minimize player" aria-pressed="false" title="Minimize (H)">
+      <svg class="icon"><use href="#i-chevron"/></svg>
+    </button>
+  </div>
 
-        function changeLanguage() {
-            const selectedLanguage = document.getElementById('language').value;
-            document.querySelectorAll('.translation').forEach((element, index) => {
-                element.textContent = translations[selectedLanguage][index];
-            });
-        }
+  <audio id="audio" preload="metadata" src="Kaal%20Bhairav%20Ashtakam.mp3"></audio>
+</section>
 
-        document.addEventListener('DOMContentLoaded', changeLanguage);
+<dialog class="shortcuts" id="shortcuts" aria-labelledby="shortcuts-title">
+  <div class="shortcuts__head">
+    <h2 id="shortcuts-title">Keyboard shortcuts</h2>
+    <button type="button" class="icon-btn" id="shortcuts-close" aria-label="Close">
+      <svg class="icon"><use href="#i-close"/></svg>
+    </button>
+  </div>
+  <dl class="shortcuts__list">
+    <div><dt><kbd>Space</kbd></dt><dd>Play / pause</dd></div>
+    <div><dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Back / forward 5 seconds</dd></div>
+    <div><dt><kbd>↑</kbd> <kbd>↓</kbd></dt><dd>Volume up / down</dd></div>
+    <div><dt><kbd>M</kbd></dt><dd>Mute / unmute</dd></div>
+    <div><dt><kbd>L</kbd></dt><dd>Loop the recitation</dd></div>
+    <div><dt><kbd>H</kbd></dt><dd>Minimise / restore the player</dd></div>
+    <div><dt><kbd>?</kbd></dt><dd>Show this help</dd></div>
+    <div><dt><kbd>Esc</kbd></dt><dd>Close this help</dd></div>
+  </dl>
+</dialog>
 
-        function toggleAudioPlayer() {
-            const player = document.getElementById('audio-player');
-            const toggleShowButton = document.getElementById('toggle-show-button');
-            isPlayerHidden = !isPlayerHidden;
-            player.classList.toggle('hidden', isPlayerHidden);
-            toggleShowButton.style.display = isPlayerHidden ? 'block' : 'none';
-        }
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-        function toggleCollapse(element) {
-            element.classList.toggle('active');
-            element.nextElementSibling.style.display = element.classList.contains('active') ? 'block' : 'none';
-        }
-
-        function toggleLoop() {
-            const audio = document.getElementById('audio');
-            const loopIcon = document.getElementById('loop-icon');
-            isLooping = !isLooping;
-            audio.loop = isLooping;
-            loopIcon.src = isLooping ? "https://img.icons8.com/ios-glyphs/24/ff4500/repeat.png" : "https://img.icons8.com/ios-glyphs/24/ffffff/repeat.png";
-        }
-
-        document.addEventListener('keydown', function(event) {
-            const audio = document.getElementById('audio');
-            if (event.target.tagName !== 'INPUT') {
-                switch(event.key) {
-                    case ' ':
-                        event.preventDefault();
-                        audio.paused ? audio.play() : audio.pause();
-                        break;
-                    case 'ArrowUp':
-                        audio.volume = Math.min(audio.volume + 0.1, 1);
-                        break;
-                    case 'ArrowDown':
-                        audio.volume = Math.max(audio.volume - 0.1, 0);
-                        break;
-                    case 'ArrowRight':
-                        audio.currentTime = Math.min(audio.currentTime + 5, audio.duration);
-                        break;
-                    case 'ArrowLeft':
-                        audio.currentTime = Math.max(audio.currentTime - 5, 0);
-                        break;
-                    case 'l':
-                        toggleLoop();
-                        break;
-                    case 'h':
-                        toggleAudioPlayer();
-                        break;
-                    case 'm':
-                        audio.muted = !audio.muted;
-                        break;
-                }
-            }
-        });
-
-        // Make the audio player movable
-        const player = document.getElementById('audio-player');
-        player.addEventListener('mousedown', function(e) {
-            if (!['BUTTON', 'AUDIO', 'A'].includes(e.target.tagName)) {
-                e.preventDefault();
-                let offsetX = e.clientX - player.getBoundingClientRect().left;
-                let offsetY = e.clientY - player.getBoundingClientRect().top;
-
-                function onMouseMove(event) {
-                    let newLeft = Math.max(0, Math.min(event.pageX - offsetX, window.innerWidth - player.offsetWidth));
-                    let newTop = Math.max(0, Math.min(event.pageY - offsetY, window.innerHeight - player.offsetHeight));
-                    player.style.left = `${newLeft}px`;
-                    player.style.top = `${newTop}px`;
-                }
-
-                document.addEventListener('mousemove', onMouseMove);
-                document.addEventListener('mouseup', () => document.removeEventListener('mousemove', onMouseMove), { once: true });
-            }
-        });
-
-        player.ondragstart = () => false;
-
-    </script>
+<script src="data.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

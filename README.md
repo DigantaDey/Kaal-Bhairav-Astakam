@@ -1,54 +1,89 @@
 # Kaal Bhairav Ashtakam
 
-This repository hosts a web page for the recitation and display of the Kaal Bhairav Ashtakam. The page features the full text of the ashtakam in Sanskrit, an embedded audio player for listening to the recitation, and a thematic UI resonating with Lord Kaal Bhairav.
+A quiet, readable web edition of the **Kaal Bhairav Ashtakam** — eight Sanskrit verses in praise of
+Lord Kālabhairava, followed by the *phalaśruti* — with a full recitation, translations, and a design
+that stays out of the way of the text.
+
+**Live site:** [digantadey.github.io/Kaal-Bhairav-Astakam](https://digantadey.github.io/Kaal-Bhairav-Astakam/)
 
 ## Features
 
-- Full text of the Kaal Bhairav Ashtakam in Sanskrit
-- Language selector supporting English and Bengali translations
-- Responsive, movable audio player with the following controls:
-  - Play, pause, and stop the recitation audio
-  - Volume control with the arrow keys
-  - Forward and backward controls using the arrow keys
-  - Looping toggle with the 'L' key
-  - Mute/unmute with the 'M' key
-  - Show/hide the player with the 'H' key
-- Thematic UI design to enhance the spiritual experience
-- Credits to the original YouTube audio source
-- QR code for easy access to the live site on mobile devices
+**Reading**
 
-## Live Site
+- All nine verses in Devanagari, with the verse number and *phalaśruti* marked
+- Optional IAST (roman) transliteration of every verse
+- English and Bengali meanings, shown one verse at a time or all at once
+- Three-step text size control, for comfortable reading on any screen
+- Dark "temple at midnight" theme and a warm parchment light theme
+  (the system colour-scheme is respected on a first visit)
+- Clean print layout — printing gives you the verses *and* the meanings, without the chrome
 
-You can view the live site here: [Kaal Bhairav Ashtakam](https://digantadey.github.io/Kaal-Bhairav-Astakam/)
+**Listening**
+
+- Custom audio player with play/pause, seek, elapsed/total time, volume, playback speed (0.75×–1.5×),
+  and a loop toggle
+- Drag the player anywhere on the page (desktop); it stays inside the viewport and remembers its place
+- Minimise it to a compact pill when you only want the text
+- Lock-screen / OS media controls through the Media Session API
+- Arrow-key seeking and volume, so you never have to leave the keyboard
+
+**Throughout**
+
+- Preferences persist in `localStorage`: language, theme, text size, transliteration, volume, speed,
+  loop, minimised state and player position
+- Responsive down to small phones, with safe-area padding for notched devices
+- Accessible: semantic landmarks, labelled controls, visible focus rings, WCAG AA contrast in both
+  themes, `prefers-reduced-motion` support, and a keyboard-shortcut reference
+
+## Keyboard shortcuts
+
+| Key | Action |
+| --- | --- |
+| <kbd>Space</kbd> | Play / pause |
+| <kbd>←</kbd> <kbd>→</kbd> | Seek back / forward 5 seconds |
+| <kbd>↑</kbd> <kbd>↓</kbd> | Volume up / down |
+| <kbd>M</kbd> | Mute / unmute |
+| <kbd>L</kbd> | Loop the recitation |
+| <kbd>H</kbd> | Minimise / restore the player |
+| <kbd>?</kbd> | Show the shortcut list |
+
+Shortcuts are ignored while typing in a field, and <kbd>Space</kbd> is left alone when a button or
+link has focus so that it activates that control instead.
+
+## Project files
+
+| File | Purpose |
+| --- | --- |
+| `index.html` | Page structure and all nine verses |
+| `styles.css` | Design tokens, themes, layout, player styling |
+| `data.js` | English and Bengali meanings |
+| `app.js` | Language, preferences, player and keyboard behaviour |
+| `Kaal Bhairav Ashtakam.mp3` | Recitation audio |
+| `favicon.svg` | Trishul icon |
+
+No build step and no framework — plain HTML, CSS and JavaScript.
+
+## Run locally
+
+Open `index.html` directly in a browser, or serve the folder so that the audio streams with range
+requests:
+
+```sh
+python3 -m http.server 8000
+# then visit http://localhost:8000
+```
 
 ## Credits
 
-The audio recitation of the Kaal Bhairav Ashtakam is sourced from [this YouTube video](https://www.youtube.com/watch?v=xJyiIgAKNJA).
+The recitation is sourced from [this YouTube video](https://www.youtube.com/watch?v=xJyiIgAKNJA).
+The verses are traditional. The English and Bengali renderings are offered as an aid to reading, not
+as a scholarly edition.
 
-## How to Contribute
+## Contributing
 
-If you would like to contribute to this project, feel free to fork the repository and submit a pull request. Any improvements or suggestions are welcome.
+Fork the repository and open a pull request. Corrections to the text or translations are especially
+welcome.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## How to Host Locally
-
-To host this project locally, follow these steps:
-
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/digantadey/Kaal-Bhairav-Astakam.git
-    ```
-2. Navigate to the project directory:
-    ```sh
-    cd Kaal-Bhairav-Astakam
-    ```
-3. Open `index.html` in your web browser to view the page locally.
-
-## Contact
-
-If you have any questions or feedback, please feel free to reach out to the repository owner.
-
-Enjoy the spiritual recitation of the Kaal Bhairav Ashtakam!
+[MIT](LICENSE)
