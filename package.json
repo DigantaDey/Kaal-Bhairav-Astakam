@@ -1,0 +1,22 @@
+{
+  "name": "kaal-bhairav-ashtakam",
+  "version": "2.0.0",
+  "private": true,
+  "description": "A reading and listening page for the Kaal Bhairav Ashtakam",
+  "scripts": {
+    "test": "npm run lint && npm run test:behaviour && npm run test:a11y",
+    "lint": "npm run lint:html && npm run lint:css && npm run lint:js",
+    "lint:html": "html-validate index.html",
+    "lint:css": "csstree-validator styles.css",
+    "lint:js": "node --check app.js && node --check data.js && node --check tests/site.test.js && node --check tests/a11y.test.js",
+    "test:behaviour": "node tests/site.test.js",
+    "test:a11y": "node tests/a11y.test.js",
+    "serve": "python3 -m http.server 8000"
+  },
+  "devDependencies": {
+    "axe-core": "^4.10.2",
+    "csstree-validator": "^4.0.1",
+    "html-validate": "^11.17.0",
+    "jsdom": "^30.1.3"
+  }
+}
