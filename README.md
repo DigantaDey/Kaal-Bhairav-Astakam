@@ -22,7 +22,9 @@ that stays out of the way of the text.
 
 - Custom audio player with play/pause, seek, elapsed/total time, volume, playback speed (0.75×–1.5×),
   and a loop toggle
-- Drag the player anywhere on the page (desktop); it stays inside the viewport and remembers its place
+- Drag the player from anywhere on the bar — grab the grip, the title, or any empty space between the
+  controls — on mouse *and* touch; it stays inside the viewport and remembers its place
+- Double-click the grip to send the player back to its docked position
 - Minimise it to a compact pill when you only want the text
 - Lock-screen / OS media controls through the Media Session API
 - Arrow-key seeking and volume, so you never have to leave the keyboard
@@ -60,8 +62,21 @@ link has focus so that it activates that control instead.
 | `app.js` | Language, preferences, player and keyboard behaviour |
 | `Kaal Bhairav Ashtakam.mp3` | Recitation audio |
 | `favicon.svg` | Trishul icon |
+| `tests/` | jsdom behaviour tests and an axe-core accessibility audit |
+| `.github/workflows/ci.yml` | CI: linting, behaviour tests and the a11y audit |
 
-No build step and no framework — plain HTML, CSS and JavaScript.
+No build step and no framework — plain HTML, CSS and JavaScript. The Node packages are only needed
+to run the checks.
+
+## Development
+
+```sh
+npm install     # dev dependencies (jsdom, axe-core, html-validate, csstree-validator)
+npm test        # HTML/CSS/JS lint + behaviour tests + accessibility audit
+npm run serve   # http://localhost:8000
+```
+
+GitHub Actions runs the same `npm test` on every pull request.
 
 ## Run locally
 

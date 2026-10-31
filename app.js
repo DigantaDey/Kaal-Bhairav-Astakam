@@ -431,10 +431,8 @@
 
   /* ---------------- Draggable player ---------------- */
   var dragState = null;
-
-  function canDrag() {
-    return window.matchMedia('(min-width: 720px)').matches;
-  }
+  var CONTROLS = 'button, input, select, textarea, a, [role="button"]';
+  var HANDLE = '.player__grab, .player__meta';
 
   function positionPlayer(x, y) {
     if (!player) { return; }
@@ -456,43 +454,79 @@
     positionPlayer(pos.x, pos.y);
   }
 
-  if (player) {
-    player.addEventListener('pointerdown', function (event) {
-      if (dragState || !canDrag()) { return; }
-      if (event.pointerType === 'mouse' && event.button !== 0) { return; }
-      if (!event.target.closest('.player__grab, .player__meta')) { return; }
+  function resetPosition(quiet) {
+    if (!player) { return; }
+    applyPosition(null);
+    prefs.position = null;
+    savePrefs();
+    if (!quiet) { toast('Player position reset', 1600); }
+  }
 
-      var rect = player.getBoundingClientRect();
-      dragState = {
-        id: event.pointerId,
-        dx: event.clientX - rect.left,
-        dy: event.clientY - rect.top
-      };
-      player.classList.add('is-dragging');
-      player.style.transform = 'none';
-      player.style.bottom = 'auto';
-      player.style.left = rect.left + 'px';
-      player.style.top = rect.top + 'px';
-      try { player.setPointerCapture(event.pointerId); } catch (err) { /* noop */ }
-      event.preventDefault();
-    });
+  function onDragMove(event) {
+    if (!dragState || event.pointerId !== dragState.id) { return; }
+    if (event.cancelable) { event.preventDefault(); }
+    positionPlayer(event.clientX - dragState.dx, event.clientY - dragState.dy);
+  }
 
-    player.addEventListener('pointermove', function (event) {
-      if (!dragState || event.pointerId !== dragState.id) { return; }
-      positionPlayer(event.clientX - dragState.dx, event.clientY - dragState.dy);
-    });
+  function stopDrag() {
+    window.removeEventListener('pointermove', onDragMove);
+    window.removeEventListener('pointerup', stopDrag);
+    window.removeEventListener('pointercancel', stopDrag);
+    if (!dragState) { return; }
+    dragState = null;
+    player.classList.remove('is-dragging');
+    document.documentElement.classList.remove('is-dragging-player');
+    var rect = player.getBoundingClientRect();
+    prefs.position = { x: rect.left, y: rect.top };
+    savePrefs();
+  }
 
-    var endDrag = function (event) {
-      if (!dragState || (event && event.pointerId !== dragState.id)) { return; }
-      var rect = player.getBoundingClientRect();
-      dragState = null;
-      player.classList.remove('is-dragging');
-      prefs.position = { x: rect.left, y: rect.top };
-      savePrefs();
+  function startDrag(event) {
+    if (!player || dragState) { return; }
+    if (event.pointerType === 'mouse' && event.button !== 0) { return; }
+
+    var target = event.target instanceof Element ? event.target : null;
+    if (!target) { return; }
+
+    var onHandle = !!target.closest(HANDLE);
+    var onControl = !!target.closest(CONTROLS);
+
+    /* Buttons, sliders and the speed menu keep their normal behaviour. */
+    if (onControl && !onHandle) { return; }
+    /* On touch, drag only from the grip or the title so page scrolling still works. */
+    if (event.pointerType !== 'mouse' && !onHandle) { return; }
+
+    var rect = player.getBoundingClientRect();
+    dragState = {
+      id: event.pointerId,
+      dx: event.clientX - rect.left,
+      dy: event.clientY - rect.top
     };
 
-    player.addEventListener('pointerup', endDrag);
-    player.addEventListener('pointercancel', endDrag);
+    player.classList.add('is-dragging');
+    document.documentElement.classList.add('is-dragging-player');
+    player.style.transform = 'none';
+    player.style.bottom = 'auto';
+    player.style.left = rect.left + 'px';
+    player.style.top = rect.top + 'px';
+
+    /* Pointer capture keeps the drag alive over other elements; the window
+       listeners keep it working where capture is unavailable. */
+    try { player.setPointerCapture(event.pointerId); } catch (err) { /* noop */ }
+    window.addEventListener('pointermove', onDragMove, { passive: false });
+    window.addEventListener('pointerup', stopDrag);
+    window.addEventListener('pointercancel', stopDrag);
+
+    if (event.cancelable) { event.preventDefault(); }
+  }
+
+  if (player) {
+    player.addEventListener('pointerdown', startDrag);
+
+    var grabHandle = $('#player-grab');
+    if (grabHandle) {
+      grabHandle.addEventListener('dblclick', function () { resetPosition(); });
+    }
 
     window.addEventListener('resize', function () {
       if (prefs.position) { applyPosition(prefs.position); }
