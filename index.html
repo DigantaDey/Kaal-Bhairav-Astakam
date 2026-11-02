@@ -39,6 +39,7 @@
   <symbol id="i-mute" viewBox="0 0 24 24"><path d="M4 9.5h3.2L12 5.4v13.2L7.2 14.5H4z" stroke-linejoin="round"/><path d="m16 9.5 5 5"/><path d="m21 9.5-5 5"/></symbol>
   <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
   <symbol id="i-grip" viewBox="0 0 24 24"><g fill="currentColor" stroke="none"><circle cx="9" cy="6" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="18" r="1.4"/></g></symbol>
+  <symbol id="i-reset" viewBox="0 0 24 24"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></symbol>
   <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></symbol>
   <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.2A8.2 8.2 0 0 1 9.8 4a8.4 8.4 0 1 0 10.2 10.2z" stroke-linejoin="round"/></symbol>
   <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.4 9.3a2.7 2.7 0 0 1 5.2.9c0 1.8-2.6 2-2.6 3.8"/><circle cx="12" cy="17.2" r="1" fill="currentColor" stroke="none"/></symbol>
@@ -350,7 +351,7 @@
 
       <noscript>
         <p class="noscript-note">
-          The meanings, language switch and audio controls need JavaScript. The Sanskrit text above is fully readable without it.
+          The meanings, language switch, audio controls and japa counter need JavaScript. The Sanskrit text above is fully readable without it.
         </p>
       </noscript>
     </div>
@@ -448,6 +449,25 @@
   </div>
 
   <audio id="audio" preload="metadata" src="Kaal%20Bhairav%20Ashtakam.mp3"></audio>
+</section>
+
+<!-- Japa (mala) counter -->
+<section class="japa" id="japa" aria-label="Japa counter">
+  <div class="japa__head">
+    <button type="button" class="japa__grab" id="japa-grab" aria-label="Drag to move the japa counter" title="Drag to move · double-click to reset position">
+      <svg class="icon"><use href="#i-grip"/></svg>
+    </button>
+    <span class="japa__title">Japa counter</span>
+    <button type="button" class="japa__reset" id="japa-reset" aria-label="Reset the japa count" title="Reset count">
+      <svg class="icon"><use href="#i-reset"/></svg>
+    </button>
+  </div>
+  <button type="button" class="japa__tap" id="japa-tap" aria-label="Count one japa. Current count: 0">
+    <span class="japa__num" id="japa-num" aria-hidden="true">0</span>
+    <span class="japa__meta" id="japa-meta" aria-hidden="true">Tap to count</span>
+    <span class="japa__track" aria-hidden="true"><span class="japa__fill" id="japa-fill"></span></span>
+  </button>
+  <span class="sr-only" id="japa-live" aria-live="polite"></span>
 </section>
 
 <dialog class="shortcuts" id="shortcuts" aria-labelledby="shortcuts-title">

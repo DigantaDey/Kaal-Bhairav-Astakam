@@ -113,6 +113,20 @@ function createSite(options) {
     };
   };
 
+  // same treatment for the japa counter
+  const japa = document.getElementById('japa');
+  Object.defineProperty(japa, 'offsetWidth', { configurable: true, get: function () { return 176; } });
+  Object.defineProperty(japa, 'offsetHeight', { configurable: true, get: function () { return 140; } });
+  japa.getBoundingClientRect = function () {
+    const left = parseFloat(japa.style.left) || 0;
+    const top = parseFloat(japa.style.top) || 0;
+    return {
+      left: left, top: top, x: left, y: top,
+      width: 176, height: 140,
+      right: left + 176, bottom: top + 140
+    };
+  };
+
   // the site scripts, in document order
   sources.forEach(function (src) {
     window.eval(fs.readFileSync(path.join(ROOT, src), 'utf8'));
@@ -132,7 +146,7 @@ function createSite(options) {
     }
   });
 
-  return { dom: dom, window: window, document: document, audio: audio, media: media, player: player, ready: ready };
+  return { dom: dom, window: window, document: document, audio: audio, media: media, player: player, japa: japa, ready: ready };
 }
 
 /** Build a PointerEvent-ish MouseEvent (jsdom has no PointerEvent constructor). */
