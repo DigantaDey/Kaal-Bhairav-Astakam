@@ -3,6 +3,7 @@
    - language switch, meanings, text size, roman transliteration
    - theme + reading preferences persisted in localStorage
    - custom accessible audio player (drag, keyboard, media session)
+   - draggable japa (mala) counter with reset and persistence
    ============================================================ */
 (function () {
   'use strict';
@@ -20,7 +21,9 @@
     rate: 1,
     loop: false,
     minimized: false,
-    position: null
+    position: null,
+    japaCount: 0,
+    japaPos: null
   };
 
   var $ = function (sel, root) { return (root || document).querySelector(sel); };
@@ -429,108 +432,233 @@
     } catch (err) { /* partial Media Session support */ }
   }
 
-  /* ---------------- Draggable player ---------------- */
-  var dragState = null;
+  /* ---------------- Draggable floating widgets ----------------
+     Shared by the audio player and the japa counter: pointer drag on
+     mouse and touch, clamped so the widget can never leave the viewport. */
   var CONTROLS = 'button, input, select, textarea, a, [role="button"]';
-  var HANDLE = '.player__grab, .player__meta';
+  var EDGE = 8;
 
-  function positionPlayer(x, y) {
-    if (!player) { return; }
-    player.style.transform = 'none';
-    player.style.bottom = 'auto';
-    player.style.left = clamp(x, 8, Math.max(8, window.innerWidth - player.offsetWidth - 8)) + 'px';
-    player.style.top = clamp(y, 8, Math.max(8, window.innerHeight - player.offsetHeight - 8)) + 'px';
-  }
+  function createDragger(config) {
+    var el = config.el;
+    var dragState = null;
 
-  function applyPosition(pos) {
-    if (!player) { return; }
-    if (!pos || typeof pos.x !== 'number' || typeof pos.y !== 'number') {
-      player.style.transform = '';
-      player.style.left = '';
-      player.style.top = '';
-      player.style.bottom = '';
-      return;
+    function positionEl(x, y) {
+      if (!el) { return; }
+      el.style.transform = 'none';
+      el.style.bottom = 'auto';
+      el.style.right = 'auto';
+      el.style.left = clamp(x, EDGE, Math.max(EDGE, window.innerWidth - el.offsetWidth - EDGE)) + 'px';
+      el.style.top = clamp(y, EDGE, Math.max(EDGE, window.innerHeight - el.offsetHeight - EDGE)) + 'px';
     }
-    positionPlayer(pos.x, pos.y);
-  }
 
-  function resetPosition(quiet) {
-    if (!player) { return; }
-    applyPosition(null);
-    prefs.position = null;
-    savePrefs();
-    if (!quiet) { toast('Player position reset', 1600); }
-  }
+    function apply(pos) {
+      if (!el) { return; }
+      if (!pos || typeof pos.x !== 'number' || typeof pos.y !== 'number') {
+        el.style.transform = '';
+        el.style.left = '';
+        el.style.top = '';
+        el.style.right = '';
+        el.style.bottom = '';
+        return;
+      }
+      positionEl(pos.x, pos.y);
+    }
 
-  function onDragMove(event) {
-    if (!dragState || event.pointerId !== dragState.id) { return; }
-    if (event.cancelable) { event.preventDefault(); }
-    positionPlayer(event.clientX - dragState.dx, event.clientY - dragState.dy);
-  }
+    function reset(quiet) {
+      apply(null);
+      config.write(null);
+      savePrefs();
+      if (!quiet) { toast(config.resetToast, 1600); }
+    }
 
-  function stopDrag() {
-    window.removeEventListener('pointermove', onDragMove);
-    window.removeEventListener('pointerup', stopDrag);
-    window.removeEventListener('pointercancel', stopDrag);
-    if (!dragState) { return; }
-    dragState = null;
-    player.classList.remove('is-dragging');
-    document.documentElement.classList.remove('is-dragging-player');
-    var rect = player.getBoundingClientRect();
-    prefs.position = { x: rect.left, y: rect.top };
-    savePrefs();
-  }
+    function onDragMove(event) {
+      if (!dragState || event.pointerId !== dragState.id) { return; }
+      if (event.cancelable) { event.preventDefault(); }
+      positionEl(event.clientX - dragState.dx, event.clientY - dragState.dy);
+    }
 
-  function startDrag(event) {
-    if (!player || dragState) { return; }
-    if (event.pointerType === 'mouse' && event.button !== 0) { return; }
+    function stopDrag() {
+      window.removeEventListener('pointermove', onDragMove);
+      window.removeEventListener('pointerup', stopDrag);
+      window.removeEventListener('pointercancel', stopDrag);
+      if (!dragState) { return; }
+      dragState = null;
+      el.classList.remove('is-dragging');
+      document.documentElement.classList.remove(config.dragClass);
+      var rect = el.getBoundingClientRect();
+      config.write({ x: rect.left, y: rect.top });
+      savePrefs();
+    }
 
-    var target = event.target instanceof Element ? event.target : null;
-    if (!target) { return; }
+    function startDrag(event) {
+      if (!el || dragState) { return; }
+      if (event.pointerType === 'mouse' && event.button !== 0) { return; }
 
-    var onHandle = !!target.closest(HANDLE);
-    var onControl = !!target.closest(CONTROLS);
+      var target = event.target instanceof Element ? event.target : null;
+      if (!target) { return; }
 
-    /* Buttons, sliders and the speed menu keep their normal behaviour. */
-    if (onControl && !onHandle) { return; }
-    /* On touch, drag only from the grip or the title so page scrolling still works. */
-    if (event.pointerType !== 'mouse' && !onHandle) { return; }
+      var onHandle = !!target.closest(config.handle);
+      var onControl = !!target.closest(CONTROLS);
 
-    var rect = player.getBoundingClientRect();
-    dragState = {
-      id: event.pointerId,
-      dx: event.clientX - rect.left,
-      dy: event.clientY - rect.top
+      /* Buttons, sliders and the speed menu keep their normal behaviour. */
+      if (onControl && !onHandle) { return; }
+      /* On touch, drag only from the handle so page scrolling still works. */
+      if (event.pointerType !== 'mouse' && !onHandle) { return; }
+
+      var rect = el.getBoundingClientRect();
+      dragState = {
+        id: event.pointerId,
+        dx: event.clientX - rect.left,
+        dy: event.clientY - rect.top
+      };
+
+      el.classList.add('is-dragging');
+      document.documentElement.classList.add(config.dragClass);
+      el.style.transform = 'none';
+      el.style.bottom = 'auto';
+      el.style.right = 'auto';
+      el.style.left = rect.left + 'px';
+      el.style.top = rect.top + 'px';
+
+      /* Pointer capture keeps the drag alive over other elements; the window
+         listeners keep it working where capture is unavailable. */
+      try { el.setPointerCapture(event.pointerId); } catch (err) { /* noop */ }
+      window.addEventListener('pointermove', onDragMove, { passive: false });
+      window.addEventListener('pointerup', stopDrag);
+      window.addEventListener('pointercancel', stopDrag);
+
+      if (event.cancelable) { event.preventDefault(); }
+    }
+
+    el.addEventListener('pointerdown', startDrag);
+
+    return {
+      apply: apply,
+      reset: reset,
+      reapply: function () {
+        var pos = config.read();
+        if (pos) { apply(pos); }
+      }
     };
-
-    player.classList.add('is-dragging');
-    document.documentElement.classList.add('is-dragging-player');
-    player.style.transform = 'none';
-    player.style.bottom = 'auto';
-    player.style.left = rect.left + 'px';
-    player.style.top = rect.top + 'px';
-
-    /* Pointer capture keeps the drag alive over other elements; the window
-       listeners keep it working where capture is unavailable. */
-    try { player.setPointerCapture(event.pointerId); } catch (err) { /* noop */ }
-    window.addEventListener('pointermove', onDragMove, { passive: false });
-    window.addEventListener('pointerup', stopDrag);
-    window.addEventListener('pointercancel', stopDrag);
-
-    if (event.cancelable) { event.preventDefault(); }
   }
 
+  var playerDrag = null;
   if (player) {
-    player.addEventListener('pointerdown', startDrag);
+    playerDrag = createDragger({
+      el: player,
+      handle: '.player__grab, .player__meta',
+      dragClass: 'is-dragging-player',
+      resetToast: 'Player position reset',
+      read: function () { return prefs.position; },
+      write: function (pos) { prefs.position = pos; }
+    });
 
     var grabHandle = $('#player-grab');
     if (grabHandle) {
-      grabHandle.addEventListener('dblclick', function () { resetPosition(); });
+      grabHandle.addEventListener('dblclick', function () { playerDrag.reset(); });
     }
 
-    window.addEventListener('resize', function () {
-      if (prefs.position) { applyPosition(prefs.position); }
+    window.addEventListener('resize', function () { playerDrag.reapply(); });
+  }
+
+  /* ---------------- Japa counter ---------------- */
+  var MALA_SIZE = 108;
+  var japaEl = $('#japa');
+  var japaTap = $('#japa-tap');
+  var japaNum = $('#japa-num');
+  var japaMeta = $('#japa-meta');
+  var japaFill = $('#japa-fill');
+  var japaLive = $('#japa-live');
+  var japaReset = $('#japa-reset');
+  var japaResetTimer = null;
+
+  function readJapaCount() {
+    var n = Math.floor(Number(prefs.japaCount));
+    return isFinite(n) && n > 0 ? n : 0;
+  }
+
+  function renderJapa() {
+    var count = readJapaCount();
+    var malas = Math.floor(count / MALA_SIZE);
+    var bead = count % MALA_SIZE;
+    if (japaNum) { japaNum.textContent = String(count); }
+    if (japaMeta) {
+      japaMeta.textContent = count === 0
+        ? 'Tap to count'
+        : (bead === 0
+            ? malas + (malas === 1 ? ' mala' : ' malas') + ' done'
+            : 'Mala ' + (malas + 1) + ' · ' + bead + '/' + MALA_SIZE);
+    }
+    if (japaFill) { japaFill.style.width = ((bead / MALA_SIZE) * 100).toFixed(1) + '%'; }
+    if (japaTap) { japaTap.setAttribute('aria-label', 'Count one japa. Current count: ' + count); }
+  }
+
+  function setJapaResetArmed(armed) {
+    if (!japaReset) { return; }
+    window.clearTimeout(japaResetTimer);
+    japaResetTimer = null;
+    japaReset.classList.toggle('is-armed', armed);
+    japaReset.setAttribute('aria-label', armed ? 'Confirm and reset the japa count' : 'Reset the japa count');
+    japaReset.setAttribute('title', armed ? 'Press again to reset' : 'Reset count');
+  }
+
+  function bumpJapa() {
+    var before = readJapaCount();
+    var after = before + 1;
+    prefs.japaCount = after;
+    setJapaResetArmed(false);
+    renderJapa();
+    savePrefs();
+    if (japaLive) { japaLive.textContent = 'Count: ' + after; }
+    if (japaNum) {
+      japaNum.classList.remove('is-bump');
+      void japaNum.offsetWidth; /* restart the animation */
+      japaNum.classList.add('is-bump');
+    }
+    if (Math.floor(after / MALA_SIZE) > Math.floor(before / MALA_SIZE)) {
+      toast('Mala complete — ' + MALA_SIZE + ' japa', 2400);
+    }
+    if (typeof navigator.vibrate === 'function') {
+      try { navigator.vibrate(8); } catch (err) { /* unsupported */ }
+    }
+  }
+
+  if (japaTap) { japaTap.addEventListener('click', bumpJapa); }
+
+  if (japaReset) {
+    japaReset.addEventListener('click', function () {
+      if (japaReset.classList.contains('is-armed')) {
+        setJapaResetArmed(false);
+        prefs.japaCount = 0;
+        renderJapa();
+        savePrefs();
+        if (japaLive) { japaLive.textContent = 'Count: 0'; }
+        toast('Japa count reset', 1600);
+        return;
+      }
+      setJapaResetArmed(true);
+      japaResetTimer = window.setTimeout(function () { setJapaResetArmed(false); }, 3000);
+      toast('Press reset again to confirm', 1600);
     });
+  }
+
+  var japaDrag = null;
+  if (japaEl) {
+    japaDrag = createDragger({
+      el: japaEl,
+      handle: '.japa__grab, .japa__title',
+      dragClass: 'is-dragging-japa',
+      resetToast: 'Japa position reset',
+      read: function () { return prefs.japaPos; },
+      write: function (pos) { prefs.japaPos = pos; }
+    });
+
+    var japaGrab = $('#japa-grab');
+    if (japaGrab) {
+      japaGrab.addEventListener('dblclick', function () { japaDrag.reset(); });
+    }
+
+    window.addEventListener('resize', function () { japaDrag.reapply(); });
   }
 
   /* ---------------- Shortcuts dialog ---------------- */
@@ -668,8 +796,12 @@
     updateVolumeUI();
 
     if (prefs.minimized) { setMinimized(true, true); }
-    if (prefs.position) {
-      window.requestAnimationFrame(function () { applyPosition(prefs.position); });
+    renderJapa();
+    if (playerDrag && prefs.position) {
+      window.requestAnimationFrame(function () { playerDrag.apply(prefs.position); });
+    }
+    if (japaDrag && prefs.japaPos) {
+      window.requestAnimationFrame(function () { japaDrag.apply(prefs.japaPos); });
     }
 
     var year = $('#year');

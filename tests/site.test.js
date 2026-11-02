@@ -12,7 +12,7 @@ async function main() {
   const site = createSite();
   await site.ready;
 
-  const { window, document, media, player } = site;
+  const { window, document, media, player, japa } = site;
   const $ = (sel) => document.querySelector(sel);
   const $$ = (sel) => Array.prototype.slice.call(document.querySelectorAll(sel));
   const key = (k) => document.body.dispatchEvent(new window.KeyboardEvent('keydown', { key: k, bubbles: true, cancelable: true }));
@@ -157,6 +157,57 @@ async function main() {
   r.check('desktop drag works from the player body', player.classList.contains('is-dragging'));
   up({});
 
+  r.section('Japa counter');
+  r.check('widget markup present', !!$('#japa') && !!$('#japa-tap') && !!$('#japa-reset') && !!$('#japa-grab'));
+  r.check('count starts at zero', $('#japa-num').textContent === '0' && $('#japa-meta').textContent === 'Tap to count');
+  $('#japa-tap').click();
+  r.check('tap increments the count', $('#japa-num').textContent === '1' && stored().japaCount === 1);
+  r.check('tap button label carries the count', $('#japa-tap').getAttribute('aria-label').includes('Current count: 1'));
+  r.check('live region announces the count', $('#japa-live').textContent === 'Count: 1');
+  for (let i = 0; i < 53; i += 1) { $('#japa-tap').click(); }
+  r.check('mid-mala progress shown', $('#japa-meta').textContent === 'Mala 1 · 54/108' && $('#japa-fill').style.width === '50%', [$('#japa-meta').textContent, $('#japa-fill').style.width]);
+  for (let i = 0; i < 54; i += 1) { $('#japa-tap').click(); }
+  r.check('108 completes a mala', $('#japa-num').textContent === '108' && $('#japa-meta').textContent === '1 mala done');
+
+  $('#japa-reset').click();
+  r.check('first press arms the reset', $('#japa-reset').classList.contains('is-armed') && $('#japa-num').textContent === '108');
+  r.check('armed reset asks to confirm', $('#japa-reset').getAttribute('aria-label').includes('Confirm'));
+  $('#japa-reset').click();
+  r.check('second press resets the count', $('#japa-num').textContent === '0' && stored().japaCount === 0 && !$('#japa-reset').classList.contains('is-armed'));
+
+  down($('#japa-grab'), { clientX: 60, clientY: 60 });
+  r.check('grip pointerdown starts a japa drag', japa.classList.contains('is-dragging') && japa.style.transform === 'none');
+  move({ clientX: -400, clientY: -400 });
+  r.check('drag clamps to the top-left edge', japa.style.left === '8px' && japa.style.top === '8px', [japa.style.left, japa.style.top]);
+  move({ clientX: 5000, clientY: 5000 });
+  r.check('drag clamps to the bottom-right edge', japa.style.left === '840px' && japa.style.top === '620px', [japa.style.left, japa.style.top]);
+  up({});
+  r.check('japa position persisted', !japa.classList.contains('is-dragging') && stored().japaPos && stored().japaPos.x === 840 && stored().japaPos.y === 620, stored().japaPos);
+
+  down($('#japa-tap'), { clientX: 100, clientY: 100, pointerType: 'touch' });
+  r.check('touch on the count button does not drag', !japa.classList.contains('is-dragging'));
+  up({});
+  down($('#japa-reset'), { clientX: 100, clientY: 100 });
+  r.check('pressing reset does not start a drag', !japa.classList.contains('is-dragging'));
+  up({});
+
+  const widthDescriptor = Object.getOwnPropertyDescriptor(window, 'innerWidth');
+  Object.defineProperty(window, 'innerWidth', { value: 400, configurable: true, writable: true });
+  window.dispatchEvent(new window.Event('resize'));
+  r.check('resize pulls the widget back on screen', parseFloat(japa.style.left) <= 400 - 176 - 8, japa.style.left);
+  if (widthDescriptor) { Object.defineProperty(window, 'innerWidth', widthDescriptor); }
+  else { delete window.innerWidth; }
+  window.dispatchEvent(new window.Event('resize'));
+  r.check('viewport restore brings back the saved place', parseFloat(japa.style.left) === 840, japa.style.left);
+
+  $('#japa-grab').dispatchEvent(new window.MouseEvent('dblclick', { bubbles: true }));
+  r.check('double-click resets the widget position', japa.style.left === '' && japa.style.right === '' && stored().japaPos === null, stored().japaPos);
+
+  $('#japa-tap').click();
+  $('#japa-tap').click();
+  $('#japa-tap').click();
+  r.check('counter keeps working after a reset', $('#japa-num').textContent === '3' && stored().japaCount === 3);
+
   r.section('Persistence');
   saved = stored();
   r.check('prefs stored', !!saved);
@@ -165,6 +216,7 @@ async function main() {
   r.check('iast saved', saved && saved.iast === true);
   r.check('meanings saved false', saved && saved.meanings === false);
   r.check('volume saved', saved && Math.abs(saved.volume - 0.3) < 0.01, saved && saved.volume);
+  r.check('japa count saved', saved && saved.japaCount === 3, saved && saved.japaCount);
 
   r.section('Reload with saved preferences');
   const second = createSite({ seedPrefs: saved });
@@ -175,6 +227,7 @@ async function main() {
   r.check('text scale restored to min', d2.documentElement.style.getPropertyValue('--sa-scale') === '0.9');
   r.check('meaning language restored', d2.querySelector('#meaning-1 .meaning__text').getAttribute('lang') === 'en');
   r.check('meaning text restored', d2.querySelector('#meaning-1 .meaning__text').textContent.length > 40);
+  r.check('japa count restored', d2.querySelector('#japa-num').textContent === '3');
 
   r.finish();
 }

@@ -29,10 +29,19 @@ that stays out of the way of the text.
 - Lock-screen / OS media controls through the Media Session API
 - Arrow-key seeking and volume, so you never have to leave the keyboard
 
+**Practice**
+
+- Floating japa (mala) counter — tap the big number to count, watch the 108-bead mala fill up,
+  and get a nudge whenever a mala is completed
+- Reset with a two-tap confirm, so an accidental press never wipes your count
+- Drag it anywhere by its grip or title, with a mouse *or* a touch — it is clamped to the viewport
+  so it can never leave the screen, and it remembers its place (and the count) across reloads
+- Double-click the grip to send it back to its docked corner
+
 **Throughout**
 
 - Preferences persist in `localStorage`: language, theme, text size, transliteration, volume, speed,
-  loop, minimised state and player position
+  loop, minimised state, player position, and the japa count and counter position
 - Responsive down to small phones, with safe-area padding for notched devices
 - Accessible: semantic landmarks, labelled controls, visible focus rings, WCAG AA contrast in both
   themes, `prefers-reduced-motion` support, and a keyboard-shortcut reference
@@ -56,10 +65,10 @@ link has focus so that it activates that control instead.
 
 | File | Purpose |
 | --- | --- |
-| `index.html` | Page structure and all nine verses |
-| `styles.css` | Design tokens, themes, layout, player styling |
+| `index.html` | Page structure, all nine verses, player and japa counter |
+| `styles.css` | Design tokens, themes, layout, player and counter styling |
 | `data.js` | English and Bengali meanings |
-| `app.js` | Language, preferences, player and keyboard behaviour |
+| `app.js` | Language, preferences, player, japa counter and keyboard behaviour |
 | `Kaal Bhairav Ashtakam.mp3` | Recitation audio |
 | `favicon.svg` | Trishul icon |
 | `tests/` | jsdom behaviour tests and an axe-core accessibility audit |
